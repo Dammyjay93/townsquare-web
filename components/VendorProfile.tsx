@@ -94,8 +94,9 @@ export default function VendorProfile({ data }: Props) {
   const handleInstagramClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (vendor.instagram) {
+      const instagram = vendor.instagram;
       const action = () => {
-        window.open(`https://instagram.com/${vendor.instagram.replace('@', '')}`, '_blank');
+        window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank');
       };
 
       setModalState({
