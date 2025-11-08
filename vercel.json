@@ -3,11 +3,5 @@
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "NEXT_PUBLIC_APP_STORE_URL": "@app-store-url",
-    "NEXT_PUBLIC_PLAY_STORE_URL": "@play-store-url"
-  }
+  "devCommand": "npm run dev"
 }
