@@ -110,9 +110,10 @@ export default function VendorProfile({ data }: Props) {
   const handleWebsiteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (vendor.website) {
+      const website = vendor.website;
       const action = () => {
         window.open(
-          vendor.website.startsWith('http') ? vendor.website : `https://${vendor.website}`,
+          website.startsWith('http') ? website : `https://${website}`,
           '_blank'
         );
       };
