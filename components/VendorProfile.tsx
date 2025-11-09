@@ -377,16 +377,17 @@ export default function VendorProfile({ data }: Props) {
           <div className="border-t border-gray-100 py-3 px-4">
             {isDesktop ? (
               // Desktop: QR Code + Browse more vendors
-              <div className="flex items-center justify-center gap-3">
-                <div className="flex-shrink-0">
-                  <div className="inline-block p-1.5 bg-white border border-gray-200 rounded-sm">
-                    <QRCode value="https://mytownsquare.co/download" size={40} />
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() => window.open('https://mytownsquare.co/download', '_blank')}
+                  className="flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer"
+                  aria-label="Download app"
+                >
+                  <div className="inline-block p-1 bg-white border border-gray-200 rounded-sm">
+                    <QRCode value="https://mytownsquare.co/download" size={32} />
                   </div>
-                </div>
-                <div className="text-left">
-                  <p className="text-xs text-gray-600">Browse more vendors</p>
-                  <p className="text-xs text-gray-600">in the app</p>
-                </div>
+                </button>
+                <p className="text-xs font-semibold text-gray-700">Browse more vendors in the app</p>
               </div>
             ) : (
               // Mobile: Download button
