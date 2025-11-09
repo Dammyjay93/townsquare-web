@@ -376,23 +376,29 @@ export default function VendorProfile({ data }: Props) {
           {/* Footer - Smart rendering based on device */}
           <div className="border-t border-gray-100 py-3 px-4">
             {isDesktop ? (
-              // Desktop: QR Code + Powered by
+              // Desktop: QR Code + Browse more vendors
               <div className="flex items-center justify-center gap-3">
                 <div className="flex-shrink-0">
                   <div className="inline-block p-1.5 bg-white border border-gray-200 rounded-sm">
-                    <QRCode value={`townsquare://vendor/${vendor.username}`} size={40} />
+                    <QRCode value="https://mytownsquare.co/download" size={40} />
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-semibold text-gray-900">Get the TownSquare App</p>
+                  <p className="text-xs font-semibold text-gray-900">Browse more vendors in the app</p>
                   <p className="text-xs text-gray-500">
                     Powered by <span className="font-semibold text-gray-700">TownSquare</span>
                   </p>
                 </div>
               </div>
             ) : (
-              // Mobile: Simple powered by text
-              <div className="text-center">
+              // Mobile: Download button + Powered by
+              <div className="flex flex-col items-center gap-2">
+                <a
+                  href="https://mytownsquare.co/download"
+                  className="text-xs font-semibold text-gray-900 hover:text-gray-700 transition-colors"
+                >
+                  Download the app
+                </a>
                 <p className="text-xs text-gray-500">
                   Powered by <span className="font-semibold text-gray-700">TownSquare</span>
                 </p>
