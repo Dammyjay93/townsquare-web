@@ -31,8 +31,6 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
       vendor_photos(*)
     `)
     .eq('username', username)
-    .order('service_categories(display_order)', { ascending: true })
-    .order('vendor_photos(display_order)', { ascending: true })
     .single();
 
   if (vendorError || !vendor) {
@@ -49,13 +47,20 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
 
   const category: Category | null = vendor.category || null;
   const district: { name: string; city: string } | null = vendor.district || null;
-  const serviceCategories: ServiceCategory[] = vendor.service_categories || [];
-  const allPhotos: VendorPhoto[] = vendor.vendor_photos || [];
+
+  // Sort service categories and photos by display_order
+  const serviceCategories: ServiceCategory[] = (vendor.service_categories || [])
+    .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0));
+
+  const allPhotos: VendorPhoto[] = (vendor.vendor_photos || [])
+    .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0));
 
   // Group photos by service category
   const serviceCategoriesWithPhotos = serviceCategories.map((sc: ServiceCategory) => ({
     ...sc,
-    photos: allPhotos.filter((p: VendorPhoto) => p.service_category_id === sc.id),
+    photos: allPhotos
+      .filter((p: VendorPhoto) => p.service_category_id === sc.id)
+      .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0)),
   }));
 
   return {
