@@ -32,6 +32,8 @@ const iconNameMap: Record<string, string> = {
   'logo-whatsapp': 'WhatsappLogo',
   globe: 'Globe',
   'globe-outline': 'Globe',
+  'share-social-outline': 'ShareNetwork',
+  'share-social': 'ShareNetwork',
 
   // Time
   time: 'Clock',
