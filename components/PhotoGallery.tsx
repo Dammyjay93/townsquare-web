@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { VendorPhoto } from '@/lib/types';
+import { useState, useRef } from 'react';
+import Icon from './Icon';
 
 interface Props {
   photos: VendorPhoto[];
@@ -19,17 +21,66 @@ export default function PhotoGallery({
   logoUrl,
 }: Props) {
   const currentPhoto = photos[selectedIndex];
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Minimum swipe distance (in px) to trigger navigation
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(0); // Reset
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && selectedIndex < photos.length - 1) {
+      onSelectPhoto(selectedIndex + 1);
+    }
+    if (isRightSwipe && selectedIndex > 0) {
+      onSelectPhoto(selectedIndex - 1);
+    }
+  };
+
+  const goToPrevious = () => {
+    if (selectedIndex > 0) {
+      onSelectPhoto(selectedIndex - 1);
+    }
+  };
+
+  const goToNext = () => {
+    if (selectedIndex < photos.length - 1) {
+      onSelectPhoto(selectedIndex + 1);
+    }
+  };
 
   return (
     <div className="relative">
-      {/* Main Image - Responsive height */}
-      <div className="relative h-[280px] sm:h-[350px] lg:h-[400px] w-full bg-gray-100 rounded-xl overflow-hidden">
+      {/* Main Image - Responsive height with swipe support */}
+      <div
+        ref={containerRef}
+        className="relative h-[280px] sm:h-[350px] lg:h-[400px] w-full bg-gray-100 rounded-xl overflow-hidden touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image
           src={currentPhoto.photo_url}
           alt={businessName}
           fill
-          className="object-cover"
+          className="object-cover select-none"
           priority
+          draggable={false}
         />
 
         {/* Logo Overlay */}
@@ -41,21 +92,48 @@ export default function PhotoGallery({
           </div>
         )}
 
-        {/* Pagination Dots - Larger touch targets */}
+        {/* Navigation Arrows - Desktop & Tablet */}
         {photos.length > 1 && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1">
+          <>
+            {/* Left Arrow */}
+            {selectedIndex > 0 && (
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all opacity-0 hover:opacity-100 group-hover:opacity-100 focus:opacity-100"
+                aria-label="Previous photo"
+              >
+                <Icon name="chevron-back" size={20} color="#1a3e46" />
+              </button>
+            )}
+
+            {/* Right Arrow */}
+            {selectedIndex < photos.length - 1 && (
+              <button
+                onClick={goToNext}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all opacity-0 hover:opacity-100 group-hover:opacity-100 focus:opacity-100"
+                aria-label="Next photo"
+              >
+                <Icon name="chevron-forward" size={20} color="#1a3e46" />
+              </button>
+            )}
+          </>
+        )}
+
+        {/* Pagination Dots */}
+        {photos.length > 1 && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
             {photos.map((_, index) => (
               <button
                 key={index}
                 onClick={() => onSelectPhoto(index)}
-                className="p-2 touch-manipulation"
+                className="p-1 touch-manipulation"
                 aria-label={`View photo ${index + 1}`}
               >
                 <div
                   className={`rounded-full transition-all ${
                     index === selectedIndex
-                      ? 'bg-white w-8 h-2'
-                      : 'bg-white/50 hover:bg-white/75 w-2 h-2'
+                      ? 'bg-white w-6 h-1.5'
+                      : 'bg-white/60 w-1.5 h-1.5'
                   }`}
                 />
               </button>
@@ -66,7 +144,7 @@ export default function PhotoGallery({
 
       {/* Thumbnail Strip */}
       {photos.length > 1 && (
-        <div className="flex gap-2 p-4 overflow-x-auto">
+        <div className="flex gap-2 mt-3 overflow-x-auto">
           {photos.map((photo, index) => (
             <button
               key={photo.id}
