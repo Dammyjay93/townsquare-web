@@ -22,8 +22,8 @@ export default function PhotoGallery({
 
   return (
     <div className="relative">
-      {/* Main Image */}
-      <div className="relative h-[400px] w-full bg-gray-100 rounded-xl overflow-hidden">
+      {/* Main Image - Responsive height */}
+      <div className="relative h-[280px] sm:h-[350px] lg:h-[400px] w-full bg-gray-100 rounded-xl overflow-hidden">
         <Image
           src={currentPhoto.photo_url}
           alt={businessName}
@@ -41,18 +41,24 @@ export default function PhotoGallery({
           </div>
         )}
 
-        {/* Pagination Dots */}
+        {/* Pagination Dots - Larger touch targets */}
         {photos.length > 1 && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1">
             {photos.map((_, index) => (
               <button
                 key={index}
                 onClick={() => onSelectPhoto(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === selectedIndex ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
-                }`}
+                className="p-2 touch-manipulation"
                 aria-label={`View photo ${index + 1}`}
-              />
+              >
+                <div
+                  className={`rounded-full transition-all ${
+                    index === selectedIndex
+                      ? 'bg-white w-8 h-2'
+                      : 'bg-white/50 hover:bg-white/75 w-2 h-2'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         )}

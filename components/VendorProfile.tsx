@@ -16,6 +16,7 @@ export default function VendorProfile({ data }: Props) {
   const { vendor, category, serviceCategories, allPhotos } = data;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     actionType: 'whatsapp' | 'instagram' | 'website';
@@ -28,7 +29,8 @@ export default function VendorProfile({ data }: Props) {
 
   useEffect(() => {
     const checkDevice = () => {
-      setIsDesktop(window.innerWidth >= 768);
+      setIsDesktop(window.innerWidth >= 1024);
+      setIsMobile(window.innerWidth < 768);
     };
 
     checkDevice();
@@ -47,12 +49,16 @@ export default function VendorProfile({ data }: Props) {
         );
       };
 
-      // Show modal first
-      setModalState({
-        isOpen: true,
-        actionType: 'whatsapp',
-        pendingAction: action,
-      });
+      // Skip modal on mobile for direct action
+      if (isMobile) {
+        action();
+      } else {
+        setModalState({
+          isOpen: true,
+          actionType: 'whatsapp',
+          pendingAction: action,
+        });
+      }
     }
   };
 
@@ -99,11 +105,16 @@ export default function VendorProfile({ data }: Props) {
         window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank');
       };
 
-      setModalState({
-        isOpen: true,
-        actionType: 'instagram',
-        pendingAction: action,
-      });
+      // Skip modal on mobile for direct action
+      if (isMobile) {
+        action();
+      } else {
+        setModalState({
+          isOpen: true,
+          actionType: 'instagram',
+          pendingAction: action,
+        });
+      }
     }
   };
 
@@ -112,36 +123,38 @@ export default function VendorProfile({ data }: Props) {
     if (vendor.website) {
       const website = vendor.website;
       const action = () => {
-        window.open(
-          website.startsWith('http') ? website : `https://${website}`,
-          '_blank'
-        );
+        window.open(website.startsWith('http') ? website : `https://${website}`, '_blank');
       };
 
-      setModalState({
-        isOpen: true,
-        actionType: 'website',
-        pendingAction: action,
-      });
+      // Skip modal on mobile for direct action
+      if (isMobile) {
+        action();
+      } else {
+        setModalState({
+          isOpen: true,
+          actionType: 'website',
+          pendingAction: action,
+        });
+      }
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header with Logo and Share Button */}
-      <header className="pt-8 pb-4">
+      <header className="pt-6 sm:pt-8 pb-4">
         <div className="max-w-[960px] mx-auto px-4 lg:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
                 <span className="text-gray-500 font-bold text-xs">TS</span>
               </div>
-              <span className="text-lg font-bold text-gray-900">Townsquare</span>
+              <span className="text-base sm:text-lg font-bold text-gray-900">Townsquare</span>
             </div>
-            {/* Share Button */}
+            {/* Share Button - Increased touch target */}
             <button
               onClick={handleShare}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
+              className="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow touch-manipulation"
               aria-label="Share profile"
             >
               <Icon name="share-social-outline" size={20} color="#1a3e46" />
@@ -150,21 +163,38 @@ export default function VendorProfile({ data }: Props) {
         </div>
       </header>
 
-      {/* Two-column layout container */}
-      <div className="max-w-[960px] mx-auto px-4 lg:px-6 pb-4 lg:pb-6 flex justify-center">
-        <div
-          className="bg-white rounded-xl shadow-sm w-full"
-          style={{
-            border: '0.5px solid #e5e7eb',
-            height: 'calc(100vh - 180px)',
-            maxHeight: '800px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-5 px-5 lg:pt-6 lg:px-6 flex-1 overflow-hidden">
-            {/* Left Column: Photo Gallery - Fixed */}
-            <div className="overflow-hidden">
+      {/* Main Content - Responsive layout */}
+      <div className="max-w-[960px] mx-auto px-4 lg:px-6 pb-4 lg:pb-6">
+        <div className="bg-white rounded-xl shadow-sm w-full" style={{ border: '0.5px solid #e5e7eb' }}>
+          {/* Mobile: Single column with natural flow */}
+          {/* Desktop: Two columns with fixed height */}
+          <div
+            className={`${
+              isDesktop ? 'grid grid-cols-2 gap-6 overflow-hidden' : 'flex flex-col'
+            } pt-5 px-5 lg:pt-6 lg:px-6`}
+            style={isDesktop ? { height: 'calc(100vh - 220px)', maxHeight: '800px' } : {}}
+          >
+            {/* Mobile: Business Info First (better UX) */}
+            {!isDesktop && (
+              <div className="mb-5 order-1">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
+                {vendor.location && (
+                  <div className="mb-2">
+                    <p className="text-sm text-gray-600">{vendor.location}</p>
+                  </div>
+                )}
+                {category && (
+                  <div className="inline-block">
+                    <span className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-xs text-gray-700">
+                      {category.name}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Photo Gallery */}
+            <div className={`${!isDesktop ? 'mb-5 order-2' : 'overflow-hidden'}`}>
               {allPhotos.length > 0 && (
                 <PhotoGallery
                   photos={allPhotos}
@@ -176,35 +206,34 @@ export default function VendorProfile({ data }: Props) {
               )}
             </div>
 
-            {/* Right Column: Content - Scrollable */}
-            <div className="overflow-y-auto pr-2" style={{ maxHeight: '100%' }}>
-              {/* Main Info Section */}
-              <div className="mb-5">
-                {/* Business Name */}
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
-
-                {/* Location */}
-                {vendor.location && (
-                  <div className="mb-2">
-                    <p className="text-sm text-gray-600">{vendor.location}</p>
-                  </div>
-                )}
-
-                {/* Category Chip */}
-                {category && (
-                  <div className="inline-block">
-                    <span className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-xs text-gray-700">
-                      {category.name}
-                    </span>
-                  </div>
-                )}
-              </div>
+            {/* Content - Scrollable on desktop, natural flow on mobile */}
+            <div className={`${isDesktop ? 'overflow-y-auto pr-2' : 'order-3'}`}>
+              {/* Desktop: Business Info */}
+              {isDesktop && (
+                <div className="mb-5">
+                  <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
+                  {vendor.location && (
+                    <div className="mb-2">
+                      <p className="text-sm text-gray-600">{vendor.location}</p>
+                    </div>
+                  )}
+                  {category && (
+                    <div className="inline-block">
+                      <span className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-xs text-gray-700">
+                        {category.name}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* About Section */}
               {vendor.description && (
                 <div className="mb-5">
                   <h2 className="text-base font-bold text-gray-900 mb-2">About</h2>
-                  <p className="text-sm text-gray-700 leading-relaxed">{vendor.description}</p>
+                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                    {vendor.description}
+                  </p>
                 </div>
               )}
 
@@ -212,7 +241,6 @@ export default function VendorProfile({ data }: Props) {
               {vendor.services && vendor.services.length > 0 && (
                 <div className="mb-5">
                   <h2 className="text-base font-bold text-gray-900 mb-3">Specialties</h2>
-                  {/* ServiceBadgeList */}
                   <div className="flex flex-wrap gap-1.5">
                     {vendor.services.slice(0, 10).map((service, index) => (
                       <span
@@ -234,11 +262,9 @@ export default function VendorProfile({ data }: Props) {
               {/* Services & Pricing */}
               {serviceCategories.length > 0 && (
                 <div className="mb-5">
-                  {/* Header */}
                   <div className="mb-3">
                     <h2 className="text-base font-bold text-gray-900">Services & Pricing</h2>
                   </div>
-                  {/* Services List */}
                   <div>
                     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                       {serviceCategories.map((serviceCategory, index) => (
@@ -259,15 +285,13 @@ export default function VendorProfile({ data }: Props) {
                 <div className="mb-5">
                   <h2 className="text-base font-bold text-gray-900 mb-3">Connect</h2>
                   <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    {/* Instagram link */}
                     {vendor.instagram && (
                       <>
                         <a
                           href={`https://instagram.com/${vendor.instagram.replace('@', '')}`}
                           onClick={handleInstagramClick}
-                          className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors"
+                          className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors active:bg-gray-100 touch-manipulation"
                         >
-                          {/* Icon Container - matches mobile: w-10 h-10 rounded-full mr-3 */}
                           <div
                             className="w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-white"
                             style={{
@@ -279,22 +303,18 @@ export default function VendorProfile({ data }: Props) {
                           >
                             <Icon name="logo-instagram" size={20} color="#1a3e46" />
                           </div>
-                          {/* Text - matches mobile */}
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-500 mb-1">Instagram</p>
                             <p className="text-base text-gray-900">{vendor.instagram}</p>
                           </div>
-                          {/* Chevron - matches mobile */}
                           <Icon name="chevron-forward" size={20} color="#a8a29e" />
                         </a>
-                        {/* Divider - matches mobile cardBorder */}
                         {vendor.website && (
                           <div className="h-px" style={{ backgroundColor: '#eeeeec' }} />
                         )}
                       </>
                     )}
 
-                    {/* Website link */}
                     {vendor.website && (
                       <a
                         href={
@@ -303,9 +323,8 @@ export default function VendorProfile({ data }: Props) {
                             : `https://${vendor.website}`
                         }
                         onClick={handleWebsiteClick}
-                        className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors"
+                        className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors active:bg-gray-100 touch-manipulation"
                       >
-                        {/* Icon Container - matches mobile: w-10 h-10 rounded-full mr-3 */}
                         <div
                           className="w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-white"
                           style={{
@@ -317,12 +336,10 @@ export default function VendorProfile({ data }: Props) {
                         >
                           <Icon name="globe-outline" size={20} color="#1a3e46" />
                         </div>
-                        {/* Text - matches mobile */}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-500 mb-1">Website</p>
                           <p className="text-base text-gray-900 truncate">{vendor.website}</p>
                         </div>
-                        {/* Chevron - matches mobile */}
                         <Icon
                           name="chevron-forward"
                           size={20}
@@ -335,15 +352,14 @@ export default function VendorProfile({ data }: Props) {
                 </div>
               )}
 
-              {/* WhatsApp Button */}
+              {/* WhatsApp Button - Better touch target */}
               {vendor.whatsapp && (
-                <div className="mt-6">
+                <div className="mt-6 mb-5">
                   <button
                     onClick={handleWhatsAppClick}
-                    className="w-full bg-gray-900 text-white rounded-full flex items-center justify-center font-semibold text-sm hover:bg-gray-800 active:opacity-80 transition-all"
-                    style={{ height: '44px' }}
+                    className="w-full bg-gray-900 text-white rounded-full flex items-center justify-center font-semibold text-sm hover:bg-gray-800 active:opacity-80 transition-all touch-manipulation"
+                    style={{ height: '48px', minHeight: '48px' }}
                   >
-                    {/* WhatsApp Icon */}
                     <Icon name="logo-whatsapp" size={20} color="white" className="mr-2" />
                     Send a message
                   </button>
@@ -352,7 +368,7 @@ export default function VendorProfile({ data }: Props) {
             </div>
           </div>
 
-          {/* Enhanced Footer with App Download */}
+          {/* Footer - Smart rendering based on device */}
           <div className="border-t border-gray-100 py-3 px-4">
             {isDesktop ? (
               // Desktop: QR Code + Powered by
@@ -370,21 +386,8 @@ export default function VendorProfile({ data }: Props) {
                 </div>
               </div>
             ) : (
-              // Mobile: Download button + Powered by
+              // Mobile: Simple powered by text
               <div className="text-center">
-                <p className="text-xs font-semibold text-gray-900 mb-2">Get the TownSquare App</p>
-                <a
-                  href={
-                    typeof window !== 'undefined' && /iPhone|iPad|iPod/.test(navigator.userAgent)
-                      ? 'https://apps.apple.com/app/townsquare'
-                      : 'https://play.google.com/store/apps/details?id=com.townsquare'
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-1.5 bg-gray-900 text-white rounded-full text-xs font-semibold hover:bg-gray-800 transition-colors mb-2"
-                >
-                  Download
-                </a>
                 <p className="text-xs text-gray-500">
                   Powered by <span className="font-semibold text-gray-700">TownSquare</span>
                 </p>
@@ -394,15 +397,17 @@ export default function VendorProfile({ data }: Props) {
         </div>
       </div>
 
-      {/* App Prompt Modal */}
-      <AppPromptModal
-        isOpen={modalState.isOpen}
-        onClose={handleModalClose}
-        onContinue={handleModalContinue}
-        vendorName={vendor.business_name}
-        vendorUsername={vendor.username}
-        actionType={modalState.actionType}
-      />
+      {/* App Prompt Modal - Only shown on desktop */}
+      {!isMobile && (
+        <AppPromptModal
+          isOpen={modalState.isOpen}
+          onClose={handleModalClose}
+          onContinue={handleModalContinue}
+          vendorName={vendor.business_name}
+          vendorUsername={vendor.username}
+          actionType={modalState.actionType}
+        />
+      )}
     </div>
   );
 }
