@@ -362,7 +362,7 @@ export default function VendorProfile({ data }: Props) {
                 <div className="mt-6 mb-5">
                   <button
                     onClick={handleWhatsAppClick}
-                    className="w-full bg-gray-900 text-white rounded-full flex items-center justify-center font-semibold text-sm hover:bg-gray-800 active:opacity-80 transition-all touch-manipulation"
+                    className="w-full bg-primary-500 text-white rounded-full flex items-center justify-center font-semibold text-sm hover:bg-primary-600 active:opacity-80 transition-all touch-manipulation"
                     style={{ height: '48px', minHeight: '48px' }}
                   >
                     <Icon name="logo-whatsapp" size={20} color="white" className="mr-2" />
@@ -387,8 +387,8 @@ export default function VendorProfile({ data }: Props) {
                     <QRCode value="https://mytownsquare.co/download" size={32} />
                   </div>
                 </button>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-primary-500">Browse more vendors in the app</p>
+                <div className="flex flex-col justify-center">
+                  <p className="text-xs font-semibold text-gray-700">Browse more vendors in the app</p>
                   <p className="text-2xs text-gray-500">Scan or click to download</p>
                 </div>
               </div>
