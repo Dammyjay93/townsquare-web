@@ -49,16 +49,12 @@ export default function VendorProfile({ data }: Props) {
         );
       };
 
-      // Skip modal on mobile for direct action
-      if (isMobile) {
-        action();
-      } else {
-        setModalState({
-          isOpen: true,
-          actionType: 'whatsapp',
-          pendingAction: action,
-        });
-      }
+      // Always show modal to prompt app download
+      setModalState({
+        isOpen: true,
+        actionType: 'whatsapp',
+        pendingAction: action,
+      });
     }
   };
 
@@ -105,16 +101,12 @@ export default function VendorProfile({ data }: Props) {
         window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank');
       };
 
-      // Skip modal on mobile for direct action
-      if (isMobile) {
-        action();
-      } else {
-        setModalState({
-          isOpen: true,
-          actionType: 'instagram',
-          pendingAction: action,
-        });
-      }
+      // Always show modal to prompt app download
+      setModalState({
+        isOpen: true,
+        actionType: 'instagram',
+        pendingAction: action,
+      });
     }
   };
 
@@ -126,17 +118,20 @@ export default function VendorProfile({ data }: Props) {
         window.open(website.startsWith('http') ? website : `https://${website}`, '_blank');
       };
 
-      // Skip modal on mobile for direct action
-      if (isMobile) {
-        action();
-      } else {
-        setModalState({
-          isOpen: true,
-          actionType: 'website',
-          pendingAction: action,
-        });
-      }
+      // Always show modal to prompt app download
+      setModalState({
+        isOpen: true,
+        actionType: 'website',
+        pendingAction: action,
+      });
     }
+  };
+
+  // Helper function to blur text (show first few chars, rest as dots)
+  const blurText = (text: string, visibleChars: number = 3): string => {
+    if (!text) return '';
+    if (text.length <= visibleChars) return text;
+    return text.slice(0, visibleChars) + '•'.repeat(Math.min(text.length - visibleChars, 8));
   };
 
   return (
@@ -305,7 +300,7 @@ export default function VendorProfile({ data }: Props) {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-500 mb-1">Instagram</p>
-                            <p className="text-base text-gray-900">{vendor.instagram}</p>
+                            <p className="text-base text-gray-900">{blurText(vendor.instagram, 3)}</p>
                           </div>
                           <Icon name="chevron-forward" size={20} color="#a8a29e" />
                         </a>
@@ -338,7 +333,7 @@ export default function VendorProfile({ data }: Props) {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-500 mb-1">Website</p>
-                          <p className="text-base text-gray-900 truncate">{vendor.website}</p>
+                          <p className="text-base text-gray-900 truncate">{blurText(vendor.website, 4)}</p>
                         </div>
                         <Icon
                           name="chevron-forward"
@@ -397,17 +392,15 @@ export default function VendorProfile({ data }: Props) {
         </div>
       </div>
 
-      {/* App Prompt Modal - Only shown on desktop */}
-      {!isMobile && (
-        <AppPromptModal
-          isOpen={modalState.isOpen}
-          onClose={handleModalClose}
-          onContinue={handleModalContinue}
-          vendorName={vendor.business_name}
-          vendorUsername={vendor.username}
-          actionType={modalState.actionType}
-        />
-      )}
+      {/* App Prompt Modal - Shown on all devices to encourage app download */}
+      <AppPromptModal
+        isOpen={modalState.isOpen}
+        onClose={handleModalClose}
+        onContinue={handleModalContinue}
+        vendorName={vendor.business_name}
+        vendorUsername={vendor.username}
+        actionType={modalState.actionType}
+      />
     </div>
   );
 }
