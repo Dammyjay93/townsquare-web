@@ -243,7 +243,6 @@ export default function PhotoGallery({
         <div
           className="fixed inset-0 z-[9999] bg-black overflow-hidden overscroll-none"
           style={{
-            height: '100vh',
             height: '100dvh',
             width: '100vw',
             position: 'fixed',
