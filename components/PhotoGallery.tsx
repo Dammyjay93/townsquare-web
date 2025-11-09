@@ -207,12 +207,16 @@ export default function PhotoGallery({
       {/* Expanded Image Modal */}
       {isExpanded && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+          style={{ height: '100vh', width: '100vw' }}
           onClick={() => setIsExpanded(false)}
         >
           <button
-            onClick={() => setIsExpanded(false)}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(false);
+            }}
+            className="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10"
             aria-label="Close expanded view"
           >
             <Icon name="close" size={24} color="white" />
