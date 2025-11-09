@@ -137,7 +137,7 @@ export default function VendorProfile({ data }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-primary-50">
       {/* Header with Logo and Share Button */}
       <header className="pt-6 sm:pt-8 pb-4">
         <div className="max-w-[960px] mx-auto px-4 lg:px-6">
@@ -384,7 +384,11 @@ export default function VendorProfile({ data }: Props) {
                   aria-label="Download app"
                 >
                   <div className="inline-block p-1 bg-white border border-gray-200 rounded-sm">
-                    <QRCode value="https://mytownsquare.co/download" size={32} />
+                    <QRCode
+                      value="https://mytownsquare.co/download"
+                      size={32}
+                      fgColor="#1F4A54"
+                    />
                   </div>
                 </button>
                 <div className="flex flex-col justify-center">
