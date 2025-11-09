@@ -36,6 +36,14 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
     .single();
 
   if (vendorError || !vendor) {
+    if (vendorError) {
+      console.error('Error fetching vendor:', {
+        username,
+        error: vendorError.message,
+        code: vendorError.code,
+        details: vendorError.details,
+      });
+    }
     return null;
   }
 
