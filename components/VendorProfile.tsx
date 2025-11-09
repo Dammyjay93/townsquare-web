@@ -387,7 +387,10 @@ export default function VendorProfile({ data }: Props) {
                     <QRCode value="https://mytownsquare.co/download" size={32} />
                   </div>
                 </button>
-                <p className="text-xs font-semibold text-gray-700">Browse more vendors in the app</p>
+                <div className="text-left">
+                  <p className="text-xs font-semibold text-primary-500">Browse more vendors in the app</p>
+                  <p className="text-2xs text-gray-500">Scan or click to download</p>
+                </div>
               </div>
             ) : (
               // Mobile: Download button
