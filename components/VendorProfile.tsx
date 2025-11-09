@@ -127,11 +127,13 @@ export default function VendorProfile({ data }: Props) {
     }
   };
 
-  // Helper function to blur text (show first few chars, rest as dots)
-  const blurText = (text: string, visibleChars: number = 3): string => {
-    if (!text) return '';
-    if (text.length <= visibleChars) return text;
-    return text.slice(0, visibleChars) + '•'.repeat(Math.min(text.length - visibleChars, 8));
+  // Helper component to render blurred text
+  const BlurredText = ({ text, className = '' }: { text: string; className?: string }) => {
+    return (
+      <span className={className} style={{ filter: 'blur(4px)', userSelect: 'none' }}>
+        {text}
+      </span>
+    );
   };
 
   return (
@@ -300,7 +302,7 @@ export default function VendorProfile({ data }: Props) {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-500 mb-1">Instagram</p>
-                            <p className="text-base text-gray-900">{blurText(vendor.instagram, 3)}</p>
+                            <BlurredText text={vendor.instagram} className="text-base text-gray-900" />
                           </div>
                           <Icon name="chevron-forward" size={20} color="#a8a29e" />
                         </a>
@@ -333,7 +335,7 @@ export default function VendorProfile({ data }: Props) {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-500 mb-1">Website</p>
-                          <p className="text-base text-gray-900 truncate">{blurText(vendor.website, 4)}</p>
+                          <BlurredText text={vendor.website} className="text-base text-gray-900 block truncate" />
                         </div>
                         <Icon
                           name="chevron-forward"
