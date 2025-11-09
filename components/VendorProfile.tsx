@@ -137,7 +137,7 @@ export default function VendorProfile({ data }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-primary-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header with Logo and Share Button */}
       <header className="pt-6 sm:pt-8 pb-4">
         <div className="max-w-[960px] mx-auto px-4 lg:px-6">
@@ -236,7 +236,7 @@ export default function VendorProfile({ data }: Props) {
               {vendor.description && (
                 <div className="mb-5">
                   <h2 className="text-base font-bold text-gray-900 mb-2">About</h2>
-                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                  <p className="text-sm text-gray-700 leading-relaxed">
                     {vendor.description}
                   </p>
                 </div>
