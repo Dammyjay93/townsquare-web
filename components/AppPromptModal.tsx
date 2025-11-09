@@ -23,6 +23,9 @@ export default function AppPromptModal({
 }: Props) {
   const [isDesktop, setIsDesktop] = useState(false);
 
+  const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL || 'https://apps.apple.com';
+  const playStoreUrl = process.env.NEXT_PUBLIC_PLAY_STORE_URL || 'https://play.google.com';
+
   useEffect(() => {
     const checkDevice = () => {
       setIsDesktop(window.innerWidth >= 768);
@@ -49,8 +52,6 @@ export default function AppPromptModal({
   if (!isOpen) return null;
 
   const deepLink = `townsquare://vendor/${vendorUsername}`;
-  const appStoreUrl = 'https://apps.apple.com/app/townsquare'; // Update with actual URL
-  const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.townsquare'; // Update with actual URL
 
   const getActionText = () => {
     switch (actionType) {

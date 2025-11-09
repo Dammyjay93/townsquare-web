@@ -27,6 +27,10 @@ export default function VendorProfile({ data }: Props) {
     pendingAction: null,
   });
 
+  const downloadUrl = typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.host}/download`
+    : '/download';
+
   useEffect(() => {
     const checkDevice = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -379,13 +383,13 @@ export default function VendorProfile({ data }: Props) {
               // Desktop: QR Code + Browse more vendors
               <div className="flex items-center justify-center gap-2">
                 <button
-                  onClick={() => window.open('https://mytownsquare.co/download', '_blank')}
+                  onClick={() => window.open(downloadUrl, '_blank')}
                   className="flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer"
                   aria-label="Download app"
                 >
                   <div className="inline-block p-1 bg-white border border-gray-200 rounded-sm">
                     <QRCode
-                      value="https://mytownsquare.co/download"
+                      value={downloadUrl}
                       size={32}
                       fgColor="#1F4A54"
                     />
@@ -400,7 +404,7 @@ export default function VendorProfile({ data }: Props) {
               // Mobile: Download button
               <div className="text-center">
                 <a
-                  href="https://mytownsquare.co/download"
+                  href={downloadUrl}
                   className="text-xs font-semibold text-gray-900 hover:text-gray-700 transition-colors"
                 >
                   Download the app
