@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import { VendorPhoto } from '@/lib/types';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Icon from './Icon';
 
 interface Props {
@@ -26,7 +27,23 @@ export default function PhotoGallery({
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isExpanded) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isExpanded]);
 
   // Minimum swipe distance (in px) to trigger navigation
   const minSwipeDistance = 50;
@@ -204,11 +221,18 @@ export default function PhotoGallery({
         )}
       </div>
 
-      {/* Expanded Image Modal */}
-      {isExpanded && (
+      {/* Expanded Image Modal - Using Portal */}
+      {mounted && isExpanded && createPortal(
         <div
-          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-          style={{ height: '100vh', width: '100vw' }}
+          className="fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-black"
+          style={{
+            height: '100vh',
+            height: '100dvh',
+            width: '100vw',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+          }}
           onClick={() => setIsExpanded(false)}
         >
           <button
@@ -222,14 +246,16 @@ export default function PhotoGallery({
             <Icon name="close" size={24} color="white" />
           </button>
 
-          <div className="relative w-full h-full max-w-5xl max-h-[90vh]">
-            <Image
-              src={currentPhoto.photo_url}
-              alt={businessName}
-              fill
-              className="object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
+          <div className="relative w-full h-full flex items-center justify-center p-4">
+            <div className="relative w-full h-full max-w-5xl max-h-full">
+              <Image
+                src={currentPhoto.photo_url}
+                alt={businessName}
+                fill
+                className="object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
           </div>
 
           {/* Navigation in expanded view */}
@@ -267,7 +293,8 @@ export default function PhotoGallery({
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm">
             {selectedIndex + 1} / {photos.length}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
