@@ -384,24 +384,19 @@ export default function VendorProfile({ data }: Props) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-semibold text-gray-900">Browse more vendors in the app</p>
-                  <p className="text-xs text-gray-500">
-                    Powered by <span className="font-semibold text-gray-700">TownSquare</span>
-                  </p>
+                  <p className="text-xs text-gray-600">Browse more vendors</p>
+                  <p className="text-xs text-gray-600">in the app</p>
                 </div>
               </div>
             ) : (
-              // Mobile: Download button + Powered by
-              <div className="flex flex-col items-center gap-2">
+              // Mobile: Download button
+              <div className="text-center">
                 <a
                   href="https://mytownsquare.co/download"
                   className="text-xs font-semibold text-gray-900 hover:text-gray-700 transition-colors"
                 >
                   Download the app
                 </a>
-                <p className="text-xs text-gray-500">
-                  Powered by <span className="font-semibold text-gray-700">TownSquare</span>
-                </p>
               </div>
             )}
           </div>
