@@ -42,6 +42,20 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
     }
   }
 
+  // Fetch district
+  let district: { name: string; city: string } | null = null;
+  if (vendor.district_id) {
+    const { data: districtData } = await supabase
+      .from('districts')
+      .select('name, city')
+      .eq('id', vendor.district_id)
+      .single();
+
+    if (districtData) {
+      district = districtData;
+    }
+  }
+
   // Fetch service categories
   const { data: serviceCategories } = await supabase
     .from('service_categories')
@@ -67,6 +81,7 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
   return {
     vendor: vendor as VendorPublic,
     category,
+    district,
     serviceCategories: serviceCategoriesWithPhotos,
     allPhotos,
   };

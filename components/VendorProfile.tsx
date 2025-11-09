@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function VendorProfile({ data }: Props) {
-  const { vendor, category, serviceCategories, allPhotos } = data;
+  const { vendor, category, district, serviceCategories, allPhotos } = data;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -175,9 +175,13 @@ export default function VendorProfile({ data }: Props) {
             {!isDesktop && (
               <div className="mb-5 order-1">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
-                {vendor.location && (
+                {district && (
                   <div className="mb-2">
-                    <p className="text-sm text-gray-600">{vendor.location}</p>
+                    <p className="text-sm text-gray-600">
+                      {district.name}
+                      {vendor.postal_code && `, ${vendor.postal_code}`}
+                      {district.city && ` ${district.city}`}
+                    </p>
                   </div>
                 )}
                 {category && (
@@ -209,9 +213,13 @@ export default function VendorProfile({ data }: Props) {
               {isDesktop && (
                 <div className="mb-5">
                   <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
-                  {vendor.location && (
+                  {district && (
                     <div className="mb-2">
-                      <p className="text-sm text-gray-600">{vendor.location}</p>
+                      <p className="text-sm text-gray-600">
+                        {district.name}
+                        {vendor.postal_code && `, ${vendor.postal_code}`}
+                        {district.city && ` ${district.city}`}
+                      </p>
                     </div>
                   )}
                   {category && (

@@ -5,6 +5,8 @@ export interface VendorPublic {
   description: string | null;
   district_id: string | null;
   location: string | null;
+  postal_code: string | null;
+  city: string | null;
   services: string[] | null;
   whatsapp: string | null;
   instagram: string | null;
@@ -52,9 +54,15 @@ export interface VendorPhoto {
   display_order: number;
 }
 
+export interface District {
+  name: string;
+  city: string;
+}
+
 export interface VendorProfileData {
   vendor: VendorPublic;
   category: Category | null;
+  district: District | null;
   serviceCategories: (ServiceCategory & { photos: VendorPhoto[] })[];
   allPhotos: VendorPhoto[];
 }
