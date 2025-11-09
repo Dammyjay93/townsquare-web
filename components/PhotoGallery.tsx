@@ -36,13 +36,30 @@ export default function PhotoGallery({
 
   useEffect(() => {
     if (isExpanded) {
+      // Prevent scrolling on both html and body
+      const scrollY = window.scrollY;
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.position = 'fixed';
+      document.documentElement.style.top = `-${scrollY}px`;
+      document.documentElement.style.width = '100%';
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+
+      return () => {
+        // Restore scrolling and position
+        document.documentElement.style.overflow = '';
+        document.documentElement.style.position = '';
+        document.documentElement.style.top = '';
+        document.documentElement.style.width = '';
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isExpanded]);
 
   // Minimum swipe distance (in px) to trigger navigation
@@ -224,7 +241,7 @@ export default function PhotoGallery({
       {/* Expanded Image Modal - Using Portal */}
       {mounted && isExpanded && createPortal(
         <div
-          className="fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-black"
+          className="fixed inset-0 z-[9999] bg-black overflow-hidden overscroll-none"
           style={{
             height: '100vh',
             height: '100dvh',
@@ -232,8 +249,13 @@ export default function PhotoGallery({
             position: 'fixed',
             top: 0,
             left: 0,
+            touchAction: 'none',
           }}
           onClick={() => setIsExpanded(false)}
+          onTouchMove={(e) => {
+            // Prevent any scrolling in the modal
+            e.preventDefault();
+          }}
         >
           <button
             onClick={(e) => {
