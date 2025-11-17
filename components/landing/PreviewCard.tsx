@@ -140,7 +140,7 @@ export default function PreviewCard() {
                   <span className="text-secondary-600 font-medium">under 10 minutes</span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
-                  <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-400"></div>
+                  <div className="h-full w-4/5 rounded-full bg-primary-600"></div>
                 </div>
               </div>
             </div>

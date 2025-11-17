@@ -4,7 +4,7 @@ export default function Navigation() {
   return (
     <header className="flex items-center justify-between gap-4 py-3">
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 via-secondary-500 to-primary-700 shadow-lg shadow-primary-500/40">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 shadow-lg shadow-primary-500/40">
           <span className="text-sm font-semibold tracking-tight text-white">TS</span>
         </div>
         <div className="flex flex-col">

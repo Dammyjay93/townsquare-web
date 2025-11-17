@@ -32,7 +32,7 @@ export default function Hero() {
         <div className="space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
             Book local services
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-700">
+            <span className="block text-primary-600">
               for real-life moments
             </span>
           </h1>
@@ -73,7 +73,7 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <button className="w-full sm:w-auto whitespace-nowrap rounded-2xl bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-600 px-5 sm:px-6 py-2.5 text-sm sm:text-base font-semibold tracking-tight text-white shadow-md shadow-primary-500/30 hover:brightness-110 transition">
+            <button className="w-full sm:w-auto whitespace-nowrap rounded-2xl bg-primary-600 px-5 sm:px-6 py-2.5 text-sm sm:text-base font-semibold tracking-tight text-white shadow-md shadow-primary-500/30 hover:bg-primary-700 transition">
               Search providers
             </button>
           </div>

@@ -82,7 +82,7 @@ export default function FAQ() {
             </div>
             <button
               type="submit"
-              className="mt-1 inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-600 px-4 py-2 text-sm font-semibold tracking-tight text-white shadow-md shadow-primary-500/40 hover:brightness-110 transition"
+              className="mt-1 inline-flex items-center justify-center rounded-2xl bg-primary-600 px-4 py-2 text-sm font-semibold tracking-tight text-white shadow-md shadow-primary-500/40 hover:bg-primary-700 transition"
             >
               Get download link
             </button>
