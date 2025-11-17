@@ -1,19 +1,19 @@
 export default function FAQ() {
   const faqs = [
     {
-      question: 'How do you vet local service providers?',
+      question: 'How do you verify service providers?',
       answer:
-        'Every vendor completes identity verification and business checks where applicable. We combine this with ongoing community ratings and reviews to maintain high standards.',
+        'Every vendor completes identity verification and profile checks. We also rely on community ratings and reviews from other Nigerian customers to maintain quality.',
     },
     {
-      question: 'Is payment handled in the app?',
+      question: 'How does payment work?',
       answer:
-        'Yes. You can pay securely using your preferred method. Funds are only released to the provider after the service is completed.',
+        'TownSquare is a discovery platform. You arrange payment directly with service providers—whether cash, bank transfer, or card. We don\'t process payments.',
     },
     {
-      question: 'Can I reschedule or cancel a booking?',
+      question: 'Is there a fee to use TownSquare?',
       answer:
-        "Absolutely. Each vendor sets their own cancellation and rescheduling policy, which you'll see clearly before confirming your booking.",
+        'No. Browsing profiles, viewing portfolios, and messaging providers is completely free. Service providers set their own rates, which you negotiate directly.',
     },
   ];
 

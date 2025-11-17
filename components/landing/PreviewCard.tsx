@@ -65,7 +65,7 @@ export default function PreviewCard() {
 
               <button className="mt-2 inline-flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 hover:bg-slate-100 transition">
                 <div className="flex flex-col text-[0.7rem] text-slate-700">
-                  <span>See more photos & reviews in the app</span>
+                  <span>View profiles & message providers in the app</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-800 border border-slate-200">
@@ -89,10 +89,10 @@ export default function PreviewCard() {
             <div className="sm:col-span-2 bg-gradient-to-b from-slate-50 via-primary-50/80 to-secondary-50/60 p-4 sm:p-5 flex flex-col gap-4">
               <div>
                 <h2 className="text-sm font-semibold tracking-tight text-slate-900">
-                  Book by category
+                  Browse by category
                 </h2>
                 <p className="text-xs text-slate-600 mt-1">
-                  Real work from local professionals across beauty, events, and home.
+                  Discover Nigerian professionals across beauty, events, and home services.
                 </p>
               </div>
 

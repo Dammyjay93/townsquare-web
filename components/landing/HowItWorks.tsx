@@ -44,10 +44,10 @@ export default function HowItWorks() {
               <span className="text-xs text-slate-500">Step 1</span>
             </div>
             <h3 className="text-sm sm:text-base font-semibold tracking-tight text-slate-900">
-              Discover local professionals
+              Discover Nigerian professionals
             </h3>
             <p className="text-sm text-slate-600">
-              Set your location and browse verified service providers in your community, with real ratings from nearby neighbors.
+              Browse verified Nigerian service providers in Berlin with detailed profiles, portfolios, and reviews from the community.
             </p>
           </div>
 
@@ -72,10 +72,10 @@ export default function HowItWorks() {
               <span className="text-xs text-slate-500">Step 2</span>
             </div>
             <h3 className="text-sm sm:text-base font-semibold tracking-tight text-slate-900">
-              Chat, compare & confirm
+              Connect directly with vendors
             </h3>
             <p className="text-sm text-slate-600">
-              Message multiple vendors, compare quotes, and check availability before confirming your booking in one place.
+              Message providers directly through the app, discuss your needs, compare options, and arrange services that work for you.
             </p>
           </div>
 
@@ -97,10 +97,10 @@ export default function HowItWorks() {
               <span className="text-xs text-slate-500">Step 3</span>
             </div>
             <h3 className="text-sm sm:text-base font-semibold tracking-tight text-slate-900">
-              Book & pay securely
+              Arrange your service
             </h3>
             <p className="text-sm text-slate-600">
-              Lock in your time slot, pay securely through the app, and get reminders and updates until your service is complete.
+              Agree on details, pricing, and timing directly with your provider. Handle payment as you both prefer—cash, transfer, or card.
             </p>
           </div>
         </div>

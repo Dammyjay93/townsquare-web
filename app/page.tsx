@@ -9,9 +9,9 @@ import FAQ from '@/components/landing/FAQ';
 import Footer from '@/components/landing/Footer';
 
 export const metadata: Metadata = {
-  title: 'TownSquare - Nigerian Services in Berlin',
+  title: 'TownSquare - Find Nigerian Service Providers in Berlin',
   description:
-    "Connect with trusted Nigerian service providers in Berlin. From hair & beauty to events and home services, discover local pros who understand your culture.",
+    "Discover and connect with trusted Nigerian service providers in Berlin. From hair stylists to caterers, find local pros who understand your culture. Free to browse and message.",
 };
 
 export default function HomePage() {

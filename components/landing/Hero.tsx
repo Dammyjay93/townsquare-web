@@ -1,6 +1,6 @@
 'use client';
 
-import { MagnifyingGlass, MapPin } from 'phosphor-react';
+import { MagnifyingGlass, MapPin, Check, ChatCircle, Users } from 'phosphor-react';
 
 export default function Hero() {
   return (
@@ -24,20 +24,20 @@ export default function Hero() {
           <span className="font-medium">New</span>
           <span className="h-0.5 w-0.5 rounded-full bg-primary-500/80"></span>
           <span className="text-slate-700">
-            Book trusted local pros in under 2 minutes
+            Connect with Nigerian service providers in Berlin
           </span>
         </div>
 
         {/* Headline */}
         <div className="space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
-            Book local services
+            Find Nigerian services
             <span className="block text-primary-600">
-              for real-life moments
+              in Berlin
             </span>
           </h1>
           <p className="sm:text-lg leading-relaxed text-base text-slate-600">
-            From hair & beauty to events and home services, discover real local pros near you, see their work, and book in a few taps.
+            Connect with trusted Nigerian service providers in your area. From hair stylists to caterers, find local pros who understand your culture.
           </p>
         </div>
 
@@ -98,53 +98,21 @@ export default function Hero() {
         <div className="mt-5 grid grid-cols-2 sm:flex sm:flex-row gap-3 text-xs sm:text-sm text-slate-600">
           <div className="flex items-center gap-2">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500/10 text-secondary-600">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M5 13l4 4L19 7"></path>
-              </svg>
+              <Check size={14} weight="bold" />
             </span>
-            <span>Identity-verified pros</span>
+            <span>Verified profiles</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary-500/10 text-primary-600">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M3 5h18"></path>
-                <path d="M7 5v14"></path>
-                <path d="M17 5v14"></path>
-                <path d="M3 19h18"></path>
-              </svg>
+              <ChatCircle size={14} weight="bold" />
             </span>
-            <span>Secure in-app payments</span>
+            <span>Direct messaging</span>
           </div>
           <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500/10 text-secondary-600">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" x2="12" y1="3" y2="15"></line>
-              </svg>
+              <Users size={14} weight="bold" />
             </span>
-            <span>Instant booking & scheduling</span>
+            <span>Nigerian community</span>
           </div>
         </div>
       </section>
