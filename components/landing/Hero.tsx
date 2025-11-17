@@ -1,5 +1,4 @@
-import { Search, MapPin } from 'phosphor-react';
-import Image from 'next/image';
+import { MagnifyingGlass, MapPin } from 'phosphor-react';
 
 export default function Hero() {
   return (
@@ -46,7 +45,7 @@ export default function Hero() {
             <div className="flex-1 rounded-2xl border border-slate-200 bg-white/80 p-2.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 shadow-sm shadow-slate-100/60">
               <div className="flex items-center gap-2 flex-1">
                 <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-                  <Search size={16} weight="regular" />
+                  <MagnifyingGlass size={16} weight="regular" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs text-slate-500">I'm looking for</span>
