@@ -1,3 +1,5 @@
+'use client';
+
 import { MagnifyingGlass, MapPin } from 'phosphor-react';
 
 export default function Hero() {
