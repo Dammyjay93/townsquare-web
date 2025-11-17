@@ -1,6 +1,6 @@
 'use client';
 
-import { MagnifyingGlass, MapPin, Check, ChatCircle, Users } from 'phosphor-react';
+import { MagnifyingGlass, MapPin, Check, ChatCircle, UsersThree } from 'phosphor-react';
 
 export default function Hero() {
   return (
@@ -110,7 +110,7 @@ export default function Hero() {
           </div>
           <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500/10 text-secondary-600">
-              <Users size={14} weight="bold" />
+              <UsersThree size={14} weight="bold" />
             </span>
             <span>Nigerian community</span>
           </div>

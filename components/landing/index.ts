@@ -1,6 +1,7 @@
 export { default as Navigation } from './Navigation';
 export { default as Hero } from './Hero';
 export { default as PreviewCard } from './PreviewCard';
+export { default as WhyTownSquare } from './WhyTownSquare';
 export { default as HowItWorks } from './HowItWorks';
 export { default as ServiceCategories } from './ServiceCategories';
 export { default as VendorCTA } from './VendorCTA';

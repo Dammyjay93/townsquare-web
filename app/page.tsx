@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Navigation from '@/components/landing/Navigation';
 import Hero from '@/components/landing/Hero';
 import PreviewCard from '@/components/landing/PreviewCard';
+import WhyTownSquare from '@/components/landing/WhyTownSquare';
 import HowItWorks from '@/components/landing/HowItWorks';
 import ServiceCategories from '@/components/landing/ServiceCategories';
 import VendorCTA from '@/components/landing/VendorCTA';
@@ -31,6 +32,9 @@ export default function HomePage() {
             <Hero />
             <PreviewCard />
           </div>
+
+          {/* Why TownSquare */}
+          <WhyTownSquare />
 
           {/* How It Works */}
           <HowItWorks />
