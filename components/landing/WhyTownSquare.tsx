@@ -1,124 +1,78 @@
 export default function WhyTownSquare() {
-  const benefits = [
+  const features = [
     {
-      title: 'No more unreliable Facebook groups',
+      title: 'Everyone in one place.',
       description:
-        'Stop scrolling through endless posts trying to find someone trustworthy. Browse verified profiles with real work samples and reviews.',
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path>
-        </svg>
-      ),
+        'Stop jumping between Facebook, Instagram, WhatsApp groups, and Telegram channels. Every Nigerian service provider you need is here—with photos of their work and ways to reach them.',
+      image: 'feature-1.jpg',
     },
     {
-      title: 'Providers who understand your culture',
+      title: 'Find them fast, contact them directly.',
       description:
-        'Nigerian hairstylists who know braids, caterers who can cook jollof for 50, and vendors who speak your language—literally and culturally.',
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
-      ),
+        'Browse vendors, see their work, tap to WhatsApp them. No forms to fill out, no back-and-forth through a platform. Just direct contact with the person who can help you.',
+      image: 'feature-2.jpg',
     },
     {
-      title: 'Connect directly, no middleman',
+      title: 'People who already know what you want.',
       description:
-        'Message providers, discuss your needs, and arrange everything directly. We don\'t take a cut—this is a community platform, not a corporate one.',
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        </svg>
-      ),
+        'A hairstylist who can do the exact style you\'re picturing. A caterer who knows how your jollof should taste. A photographer who gets the vibe for your owambe. No long explanations needed.',
+      image: 'feature-3.jpg',
+    },
+    {
+      title: 'Free. No hidden costs.',
+      description:
+        'Use the app, browse vendors, contact them—completely free. We don\'t charge fees or take a percentage. Vendors set their own prices and you pay them directly.',
+      image: 'feature-4.jpg',
+    },
+    {
+      title: 'Built because we needed it too.',
+      description:
+        'We\'re Nigerians living in Berlin who got tired of the endless searching. TownSquare is what we wish existed when we first moved here—a simple way to find our people.',
+      image: 'feature-5.jpg',
     },
   ];
 
   return (
-    <section className="mt-12 sm:mt-16">
-      <div className="rounded-3xl border border-slate-200 bg-white/90 overflow-hidden relative shadow-sm shadow-slate-100">
-        {/* Subtle ambient glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-secondary-50/30 pointer-events-none"></div>
-
-        <div className="relative p-6 sm:p-8 md:p-10">
-          {/* Header */}
-          <div className="max-w-2xl mb-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs text-primary-700 mb-4">
-              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-primary-500/20">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-2.5 w-2.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M12 2v20M2 12h20"></path>
-                </svg>
-              </span>
-              <span className="font-medium">Why TownSquare</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 mb-3">
-              Built for Nigerians in the diaspora
+    <section id="why-townsquare">
+      {/* Two column layout: sticky left, scrollable right */}
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        {/* Left Column - Sticky Header */}
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <div className="space-y-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
+              Find your people.
+              <span className="block">Get things done.</span>
             </h2>
-            <p className="text-base sm:text-lg text-slate-600">
-              Finding quality Nigerian service providers in Berlin shouldn't be this hard. We're changing that.
+            <p className="text-base text-slate-600 max-w-lg">
+              Nigerian service providers in Berlin, all in one app. No more searching across platforms or settling for providers who don't get it.
             </p>
           </div>
+        </div>
 
-          {/* Benefits Grid */}
-          <div className="grid md:grid-cols-3 gap-5 sm:gap-6">
-            {benefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="rounded-2xl border border-slate-200 bg-white/90 p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary-200 transition-all"
-              >
-                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600">
-                  {benefit.icon}
+        {/* Right Column - Scrollable Content */}
+        <div className="space-y-12">
+          {features.map((feature, index) => (
+            <div key={index} className="group">
+              {/* Image */}
+              <div className="rounded-2xl overflow-hidden mb-6 h-64 sm:h-80 lg:h-96">
+                <div className="w-full h-full bg-gradient-to-br from-primary-100 via-slate-50 to-secondary-100 border border-slate-200 flex items-center justify-center">
+                  <span className="text-sm text-slate-400 font-medium">
+                    {feature.image}
+                  </span>
                 </div>
-                <h3 className="text-base font-semibold tracking-tight text-slate-900">
-                  {benefit.title}
+              </div>
+
+              {/* Content */}
+              <div className="space-y-3">
+                <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
+                  {feature.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  {benefit.description}
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  {feature.description}
                 </p>
               </div>
-            ))}
-          </div>
-
-          {/* Call to action */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl border border-slate-200 bg-slate-50">
-            <div className="text-center sm:text-left">
-              <p className="text-sm font-medium text-slate-900">
-                Ready to find your next favorite vendor?
-              </p>
-              <p className="text-xs text-slate-600 mt-1">
-                Join Nigerians in Berlin who've already made the switch
-              </p>
             </div>
-            <button className="whitespace-nowrap rounded-full bg-primary-600 px-6 py-2 text-sm font-semibold tracking-tight text-white shadow-sm shadow-primary-500/30 hover:bg-primary-700 transition">
-              Get the app
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </section>

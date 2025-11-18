@@ -27,13 +27,13 @@ export default function ServiceCategories() {
   ];
 
   return (
-    <section id="categories" className="mt-10 sm:mt-12">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+    <section id="categories" className="mt-16 sm:mt-24">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h2 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900">
             Services in your community
           </h2>
-          <p className="mt-1 text-sm sm:text-base text-slate-600">
+          <p className="mt-2 text-sm sm:text-base text-slate-600">
             From everyday essentials to special occasions, we've got you covered.
           </p>
         </div>
@@ -53,14 +53,14 @@ export default function ServiceCategories() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4 sm:gap-5">
+      <div className="grid md:grid-cols-3 gap-4">
         {categories.map((category) => (
           <div
             key={category.name}
-            className="rounded-2xl border border-slate-200 bg-white/90 p-4 flex flex-col gap-3 shadow-sm shadow-slate-100 hover:shadow-md transition"
+            className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col gap-4 shadow-sm hover:shadow-md hover:border-primary-200 transition"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div
                   className={`h-10 w-10 rounded-xl overflow-hidden bg-gradient-to-br ${category.gradient}`}
                 ></div>
@@ -73,7 +73,7 @@ export default function ServiceCategories() {
               </span>
             </div>
             <p className="text-sm text-slate-600">{category.description}</p>
-            <div className="flex flex-wrap gap-1.5 text-[0.7rem] text-slate-700">
+            <div className="flex flex-wrap gap-2 text-[0.7rem] text-slate-700">
               {category.tags.map((tag) => (
                 <span
                   key={tag}

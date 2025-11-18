@@ -134,6 +134,46 @@ const config: Config = {
         '2xl': '24px',
         '3xl': '32px',
       },
+      // Backdrop blur support
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        DEFAULT: '8px',
+        md: '12px',
+        lg: '16px',
+        xl: '24px',
+        '2xl': '40px',
+        '3xl': '64px',
+      },
+      // Animations for background circles
+      keyframes: {
+        'float-slow': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '25%': { transform: 'translate(120px, -80px)' },
+          '50%': { transform: 'translate(-90px, -140px)' },
+          '75%': { transform: 'translate(-150px, -60px)' },
+        },
+        'float-medium': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '33%': { transform: 'translate(-140px, 100px)' },
+          '66%': { transform: 'translate(130px, -90px)' },
+        },
+        'float-fast': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '20%': { transform: 'translate(160px, 90px)' },
+          '40%': { transform: 'translate(-110px, 150px)' },
+          '60%': { transform: 'translate(100px, -120px)' },
+          '80%': { transform: 'translate(-140px, -70px)' },
+        },
+      },
+      animation: {
+        'float-slow': 'float-slow 20s ease-in-out infinite',
+        'float-slow-reverse': 'float-slow 22s ease-in-out infinite reverse',
+        'float-medium': 'float-medium 18s ease-in-out infinite',
+        'float-medium-reverse': 'float-medium 20s ease-in-out infinite reverse',
+        'float-fast': 'float-fast 15s ease-in-out infinite',
+        'float-fast-reverse': 'float-fast 17s ease-in-out infinite reverse',
+      },
     },
   },
   plugins: [],

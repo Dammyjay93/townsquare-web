@@ -1,96 +1,74 @@
 export default function FAQ() {
   const faqs = [
     {
-      question: 'How do you verify service providers?',
+      question: 'Is TownSquare free to use?',
       answer:
-        'Every vendor completes identity verification and profile checks. We also rely on community ratings and reviews from other Nigerian customers to maintain quality.',
+        'Yes, completely free. Browse vendors, view portfolios, and contact them directly at no cost. Vendors set their own prices and you pay them directly.',
     },
     {
-      question: 'How does payment work?',
+      question: 'How do I contact a service provider?',
       answer:
-        'TownSquare is a discovery platform. You arrange payment directly with service providers—whether cash, bank transfer, or card. We don\'t process payments.',
+        'Tap the contact button on any vendor profile to message them directly on WhatsApp. No forms, no middleman, just direct communication.',
     },
     {
-      question: 'Is there a fee to use TownSquare?',
+      question: 'Can I see examples of their work?',
       answer:
-        'No. Browsing profiles, viewing portfolios, and messaging providers is completely free. Service providers set their own rates, which you negotiate directly.',
+        'Yes. Every vendor profile includes photos of their work so you can see their quality and style before reaching out.',
+    },
+    {
+      question: 'How do I know if a vendor is reliable?',
+      answer:
+        'You can see ratings and reviews from other community members who have used their services. We also verify vendor profiles.',
+    },
+    {
+      question: 'Can I become a vendor on TownSquare?',
+      answer:
+        'Absolutely. If you provide services to the Nigerian community in Berlin, you can create a vendor profile and showcase your work to potential clients.',
     },
   ];
 
   return (
-    <section id="faq" className="mt-12 sm:mt-16 mb-4">
-      <div className="grid md:grid-cols-[1.4fr_1fr] gap-6">
-        <div>
-          <h2 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900">
-            Frequently asked questions
-          </h2>
-          <div className="mt-4 space-y-3">
-            {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="group rounded-2xl border border-slate-200 bg-white/90 p-3 sm:p-4 shadow-sm shadow-slate-100"
-              >
-                <summary className="flex cursor-pointer items-center justify-between gap-2 text-sm text-slate-900 list-none">
-                  <span>{faq.question}</span>
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-50 text-slate-500 border border-slate-200 group-open:rotate-180 transition">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path d="M6 9l6 6 6-6"></path>
-                    </svg>
-                  </span>
-                </summary>
-                <p className="mt-2 text-sm text-slate-600">{faq.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
+    <section id="faq" className="py-12 sm:py-16">
+      {/* Header */}
+      <div className="text-center space-y-4 mb-12">
+        <span className="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-full uppercase tracking-wide">
+          FAQ
+        </span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
+          Frequently asked questions
+        </h2>
+        <p className="text-base text-slate-600 max-w-2xl mx-auto">
+          Here are the top questions users ask before getting started.
+        </p>
+      </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white/95 p-4 sm:p-5 flex flex-col gap-4 shadow-sm shadow-slate-100">
-          <h3 className="text-base sm:text-lg font-semibold tracking-tight text-slate-900">
-            Ready to meet your next favorite local pro?
-          </h3>
-          <p className="text-sm text-slate-600">
-            Enter your email or phone number and we'll send you a link to download the app.
-          </p>
-          <form className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-slate-700">Email or phone</label>
-              <div className="flex rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 gap-2 items-center">
+      {/* FAQ Items */}
+      <div className="max-w-3xl mx-auto border border-slate-200 rounded-2xl bg-white overflow-hidden">
+        {faqs.map((faq, index) => (
+          <details
+            key={index}
+            className="group border-b border-slate-100 last:border-b-0 hover:bg-primary-50 transition-colors"
+          >
+            <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-medium text-slate-900 list-none p-6">
+              <span>{faq.question}</span>
+              <span className="inline-flex h-8 w-8 items-center justify-center flex-shrink-0 bg-primary-100 group-hover:bg-primary-200 rounded-full text-primary-500 group-open:rotate-45 transition-all">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-slate-500"
+                  className="h-5 w-5"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
                 >
-                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                  <path d="m22 7-9.5 6L2 7"></path>
+                  <path d="M12 5v14M5 12h14"></path>
                 </svg>
-                <input
-                  type="text"
-                  placeholder="you@example.com or +49 XXX XXX XXXX"
-                  className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-sm text-slate-900 placeholder:text-slate-400"
-                />
-              </div>
+              </span>
+            </summary>
+            <div className="px-6 pb-6">
+              <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
             </div>
-            <button
-              type="submit"
-              className="mt-1 inline-flex items-center justify-center rounded-2xl bg-primary-600 px-4 py-2 text-sm font-semibold tracking-tight text-white shadow-md shadow-primary-500/40 hover:bg-primary-700 transition"
-            >
-              Get download link
-            </button>
-          </form>
-          <p className="text-[0.7rem] text-slate-500">
-            By continuing, you agree to receive a message with a download link. Standard messaging rates may apply.
-          </p>
-        </div>
+          </details>
+        ))}
       </div>
     </section>
   );

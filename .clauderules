@@ -1,0 +1,15 @@
+# TownSquare Web - Development Rules
+
+## Icons
+- **NEVER use custom SVG elements** - Always use Phosphor React icons from `phosphor-react` package
+- Import icons: `import { IconName } from 'phosphor-react';`
+- Use with props: `<IconName size={16} weight="bold" />`
+
+## Styling
+- Use Tailwind CSS utility classes
+- Follow 8pt grid spacing system
+- Brand colors defined in `tailwind.config.ts`
+
+## Components
+- Mark components using Phosphor icons as `'use client';`
+- Keep components in `/components/landing/` directory

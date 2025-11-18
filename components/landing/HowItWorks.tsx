@@ -1,17 +1,17 @@
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="mt-12 sm:mt-16">
+    <section id="how-it-works" className="mt-16 sm:mt-24">
       <div className="border-t border-slate-200 pt-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900">
               How it works
             </h2>
-            <p className="mt-1 text-sm sm:text-base text-slate-600">
+            <p className="mt-2 text-sm sm:text-base text-slate-600">
               Three simple steps to book a trusted professional in your neighborhood.
             </p>
           </div>
-          <div className="flex items-center gap-3 text-xs text-slate-500">
+          <div className="flex items-center gap-4 text-xs text-slate-500">
             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm shadow-slate-100">
               1
             </span>
@@ -24,10 +24,10 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid md:grid-cols-3 gap-4">
           {/* Step 1 */}
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 sm:p-5 flex flex-col gap-3 shadow-sm shadow-slate-100">
-            <div className="flex items-center justify-between gap-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col gap-4 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
               <div className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -52,8 +52,8 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 2 */}
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 sm:p-5 flex flex-col gap-3 shadow-sm shadow-slate-100">
-            <div className="flex items-center justify-between gap-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col gap-4 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
               <div className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-secondary-500/10 text-secondary-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -80,8 +80,8 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 3 */}
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 sm:p-5 flex flex-col gap-3 shadow-sm shadow-slate-100">
-            <div className="flex items-center justify-between gap-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col gap-4 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
               <div className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-secondary-500/10 text-secondary-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
