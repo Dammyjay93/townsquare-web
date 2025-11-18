@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { ArrowUpRight, CaretDown } from 'phosphor-react';
 
 export default function Hero() {
@@ -35,7 +36,8 @@ export default function Hero() {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
       >
-        <button
+        <Link
+          href="/download"
           className="group inline-flex items-center gap-0 whitespace-nowrap shadow-lg hover:shadow-xl active:scale-100 transition-all duration-100"
           aria-label="Download TownSquare app to find Nigerian service providers"
         >
@@ -45,7 +47,7 @@ export default function Hero() {
           <span className="flex items-center justify-center w-14 h-14 bg-white rounded-full transition-all duration-100 group-hover:bg-primary-500 group-hover:rotate-45">
             <ArrowUpRight size={20} weight="bold" className="text-primary-500 transition-colors duration-100 group-hover:text-white" />
           </span>
-        </button>
+        </Link>
       </div>
     </section>
   );

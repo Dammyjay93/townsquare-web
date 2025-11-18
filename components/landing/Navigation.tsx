@@ -214,18 +214,18 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
           </div>
 
           <nav className={`hidden md:flex items-center gap-7 text-sm transition-colors duration-500 ${textColor}`}>
-            <a href="#why-townsquare" className={`transition-colors ${hoverColor}`}>
+            <Link href="/#why-townsquare" className={`transition-colors ${hoverColor}`}>
               About
-            </a>
-            <a href="#testimonials" className={`transition-colors ${hoverColor}`}>
+            </Link>
+            <Link href="/#testimonials" className={`transition-colors ${hoverColor}`}>
               Testimonials
-            </a>
-            <a href="#vendors" className={`transition-colors ${hoverColor}`}>
+            </Link>
+            <Link href="/#vendors" className={`transition-colors ${hoverColor}`}>
               Vendors
-            </a>
-            <a href="#faq" className={`transition-colors ${hoverColor}`}>
+            </Link>
+            <Link href="/#faq" className={`transition-colors ${hoverColor}`}>
               FAQs
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -285,8 +285,8 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
               className="md:hidden flex flex-col flex-1 justify-between px-6 pb-12 pt-6 min-h-0"
             >
               <nav className="flex flex-col flex-shrink-0">
-                <a
-                  href="#why-townsquare"
+                <Link
+                  href="/#why-townsquare"
                   onClick={() => {
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
@@ -294,9 +294,9 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                   className="py-4 text-2xl font-medium text-slate-900 hover:text-primary-600 transition-colors"
                 >
                   About
-                </a>
-                <a
-                  href="#testimonials"
+                </Link>
+                <Link
+                  href="/#testimonials"
                   onClick={() => {
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
@@ -304,9 +304,9 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                   className="py-4 text-2xl font-medium text-slate-900 hover:text-primary-600 transition-colors"
                 >
                   Testimonials
-                </a>
-                <a
-                  href="#vendors"
+                </Link>
+                <Link
+                  href="/#vendors"
                   onClick={() => {
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
@@ -314,9 +314,9 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                   className="py-4 text-2xl font-medium text-slate-900 hover:text-primary-600 transition-colors"
                 >
                   Vendors
-                </a>
-                <a
-                  href="#faq"
+                </Link>
+                <Link
+                  href="/#faq"
                   onClick={() => {
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
@@ -324,7 +324,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                   className="py-4 text-2xl font-medium text-slate-900 hover:text-primary-600 transition-colors"
                 >
                   FAQs
-                </a>
+                </Link>
               </nav>
 
               {/* Get the app button in mobile menu */}
