@@ -5,19 +5,19 @@ export default function WhyTownSquare() {
     {
       title: 'Everyone in one place.',
       description:
-        'Stop jumping between Facebook, Instagram, WhatsApp groups, and Telegram channels. Every Nigerian service provider you need is here—with photos of their work and ways to reach them.',
+        'Stop jumping between Facebook, Instagram, WhatsApp groups, and Telegram channels. Every Nigerian service provider you need is here, with photos of their work and ways to reach them.',
       image: 'feature-1.png',
     },
     {
       title: 'Find them fast, contact them directly.',
       description:
-        'Browse vendors, see their work, tap to WhatsApp them. No forms to fill out, no back-and-forth through a platform. Just direct contact with the person who can help you.',
+        'Browse vendors, see their work, contact them directly on WhatsApp, Instagram, or their website. No forms to fill out, no platform middleman. Just you and the vendor.',
       image: 'feature-2.png',
     },
     {
-      title: 'People who already know what you want.',
+      title: 'All Nigerian vendors.',
       description:
-        'A hairstylist who can do the exact style you\'re picturing. A caterer who knows how your jollof should taste. A photographer who gets the vibe for your owambe. No long explanations needed.',
+        'Browse Nigerian hairstylists, caterers, photographers, and more. See photos of their work before you contact them.',
       image: 'feature-3.png',
     },
     {
@@ -36,7 +36,7 @@ export default function WhyTownSquare() {
         <div className="lg:sticky lg:top-32 lg:self-start">
           <div className="space-y-4">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
-              Find your people.
+              Find vendors fast.
               <span className="block">Get things done.</span>
             </h2>
             <p className="text-base text-slate-600 max-w-lg">

@@ -8,7 +8,7 @@ export default function FAQ() {
     {
       question: 'How do I contact a service provider?',
       answer:
-        'Tap the contact button on any vendor profile to message them directly on WhatsApp. No forms, no middleman, just direct communication.',
+        'Each vendor chooses how they want to be contacted (WhatsApp, Instagram, website, or a combination). Just tap their preferred contact method on their profile. No forms, no middleman, just direct communication.',
     },
     {
       question: 'Can I see examples of their work?',
@@ -18,12 +18,12 @@ export default function FAQ() {
     {
       question: 'How do I know if a vendor is reliable?',
       answer:
-        'You can see ratings and reviews from other community members who have used their services. We also verify vendor profiles.',
+        'You can see ratings and reviews from other users who have used their services. We also verify vendor profiles.',
     },
     {
       question: 'Can I become a vendor on TownSquare?',
       answer:
-        'Absolutely. If you provide services to the Nigerian community in Berlin, you can create a vendor profile and showcase your work to potential clients.',
+        'Absolutely. If you provide services to Nigerians in Berlin, you can create a vendor profile and showcase your work to potential clients.',
     },
   ];
 

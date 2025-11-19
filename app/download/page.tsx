@@ -84,12 +84,12 @@ export default function DownloadPage() {
 
               {/* Main Heading */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight text-white leading-tight">
-                Download our mobile app
+                Get the TownSquare app
               </h1>
 
               {/* Description */}
               <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-2xl leading-relaxed">
-                Find and connect with Nigerian service providers in Berlin. Browse profiles, view portfolios, and book services directly through the app.
+                Find and connect with Nigerian vendors in Berlin. Browse profiles, view their work, and contact them directly on WhatsApp, Instagram, or their website.
               </p>
 
               {/* Download Button - Smart button on mobile, badges on desktop */}
@@ -101,7 +101,7 @@ export default function DownloadPage() {
                     className="group inline-flex items-center gap-0 shadow-lg hover:shadow-xl transition-all duration-100"
                   >
                     <span className="px-8 py-4 text-base font-semibold tracking-tight text-primary-600 bg-white rounded-l-full rounded-r-full transition-all duration-100 group-hover:bg-white/90 whitespace-nowrap">
-                      Download the app
+                      Get the app
                     </span>
                     <span className="flex items-center justify-center w-14 h-14 bg-white rounded-full transition-all duration-100 group-hover:bg-white/90 group-hover:rotate-45">
                       <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">

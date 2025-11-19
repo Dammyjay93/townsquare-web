@@ -407,7 +407,7 @@ export default function VendorProfile({ data }: Props) {
                   href={downloadUrl}
                   className="text-xs font-semibold text-gray-900 hover:text-gray-700 transition-colors"
                 >
-                  Download the app
+                  Get the app
                 </a>
               </div>
             )}

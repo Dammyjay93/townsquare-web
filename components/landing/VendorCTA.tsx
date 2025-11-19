@@ -22,17 +22,17 @@ export default function VendorCTA() {
 
                 <div className="space-y-6">
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight">
-                    Grow your business with neighbors you can trust.
+                    Get discovered by customers looking for you.
                   </h2>
                   <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-lg">
-                    List your services on TownSquare and connect with Nigerians in Berlin who need exactly what you offer. Set your own prices, manage your bookings, and grow your client base.
+                    List your services on TownSquare and connect with Nigerians in Berlin who need exactly what you offer. Set your own prices, showcase your work, and connect with customers on your terms.
                   </p>
                 </div>
 
                 <div>
                   <a href="/download" className="group inline-flex items-center gap-0 shadow-lg hover:shadow-xl transition-all duration-100">
                     <span className="px-8 py-4 text-base font-semibold tracking-tight text-primary-500 bg-white rounded-l-full rounded-r-full transition-all duration-100 group-hover:bg-white/90">
-                      Apply as a vendor
+                      List your business
                     </span>
                     <span className="flex items-center justify-center w-14 h-14 bg-white rounded-full transition-all duration-100 group-hover:bg-white/90 group-hover:rotate-45">
                       <ArrowUpRight size={20} weight="bold" className="text-primary-500" />

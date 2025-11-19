@@ -27,7 +27,7 @@ export default function Hero() {
           </span>
         </h1>
         <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-xl mx-auto leading-relaxed">
-          Hair stylists, caterers, photographers, and more—all Nigerian, all in Berlin. Find them, contact them, book them.
+          Hair stylists, caterers, photographers, and more, all Nigerian, all in Berlin. Find them, contact them, done.
         </p>
       </div>
 
@@ -43,7 +43,7 @@ export default function Hero() {
           aria-label="Download TownSquare app to find Nigerian service providers"
         >
           <span className="px-8 py-4 text-base font-semibold tracking-tight text-primary-500 bg-white rounded-l-full rounded-r-full transition-all duration-100 group-hover:bg-primary-500 group-hover:text-white">
-            Get the App
+            Get the app
           </span>
           <span className="flex items-center justify-center w-14 h-14 bg-white rounded-full transition-all duration-100 group-hover:bg-primary-500 group-hover:rotate-45">
             <ArrowUpRight size={20} weight="bold" className="text-primary-500 transition-colors duration-100 group-hover:text-white" />

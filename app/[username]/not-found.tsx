@@ -12,7 +12,7 @@ export default function NotFound() {
             href={process.env.NEXT_PUBLIC_APP_STORE_URL || '#'}
             className="bg-primary-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-600 active:bg-primary-700 transition-colors shadow-sm"
           >
-            Download TownSquare App
+            Get the app
           </a>
         </div>
       </div>

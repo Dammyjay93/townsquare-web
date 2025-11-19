@@ -106,13 +106,13 @@ export default function Testimonials() {
       {/* Header */}
       <div className="text-center space-y-4 mb-12 px-4 max-w-6xl mx-auto">
         <span className="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-full uppercase tracking-wide">
-          Early Feedback
+          Early Reviews
         </span>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
-          What early testers are saying
+          What early users are saying
         </h2>
         <p className="text-base text-slate-600 max-w-2xl mx-auto">
-          Feedback from Nigerians in Berlin testing TownSquare.
+          Reviews from Nigerians in Berlin using TownSquare.
         </p>
       </div>
 
