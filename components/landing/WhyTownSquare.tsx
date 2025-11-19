@@ -1,34 +1,30 @@
+import Image from 'next/image';
+
 export default function WhyTownSquare() {
   const features = [
     {
       title: 'Everyone in one place.',
       description:
         'Stop jumping between Facebook, Instagram, WhatsApp groups, and Telegram channels. Every Nigerian service provider you need is here—with photos of their work and ways to reach them.',
-      image: 'feature-1.jpg',
+      image: 'feature-1.png',
     },
     {
       title: 'Find them fast, contact them directly.',
       description:
         'Browse vendors, see their work, tap to WhatsApp them. No forms to fill out, no back-and-forth through a platform. Just direct contact with the person who can help you.',
-      image: 'feature-2.jpg',
+      image: 'feature-2.png',
     },
     {
       title: 'People who already know what you want.',
       description:
         'A hairstylist who can do the exact style you\'re picturing. A caterer who knows how your jollof should taste. A photographer who gets the vibe for your owambe. No long explanations needed.',
-      image: 'feature-3.jpg',
+      image: 'feature-3.png',
     },
     {
       title: 'Free. No hidden costs.',
       description:
         'Use the app, browse vendors, contact them—completely free. We don\'t charge fees or take a percentage. Vendors set their own prices and you pay them directly.',
-      image: 'feature-4.jpg',
-    },
-    {
-      title: 'Built because we needed it too.',
-      description:
-        'We\'re Nigerians living in Berlin who got tired of the endless searching. TownSquare is what we wish existed when we first moved here—a simple way to find our people.',
-      image: 'feature-5.jpg',
+      image: 'feature-4.png',
     },
   ];
 
@@ -54,12 +50,21 @@ export default function WhyTownSquare() {
           {features.map((feature, index) => (
             <div key={index} className="group">
               {/* Image */}
-              <div className="rounded-2xl overflow-hidden mb-6 h-64 sm:h-80 lg:h-96">
-                <div className="w-full h-full bg-gradient-to-br from-primary-100 via-slate-50 to-secondary-100 border border-slate-200 flex items-center justify-center">
-                  <span className="text-sm text-slate-400 font-medium">
-                    {feature.image}
-                  </span>
-                </div>
+              <div className="rounded-2xl overflow-hidden mb-6 h-64 sm:h-80 lg:h-96 relative border border-slate-200">
+                {feature.image.endsWith('.jpg') ? (
+                  <div className="w-full h-full bg-gradient-to-br from-primary-100 via-slate-50 to-secondary-100 border border-slate-200 flex items-center justify-center">
+                    <span className="text-sm text-slate-400 font-medium">
+                      {feature.image}
+                    </span>
+                  </div>
+                ) : (
+                  <Image
+                    src={`/images/${feature.image}`}
+                    alt={feature.title}
+                    fill
+                    className="object-cover"
+                  />
+                )}
               </div>
 
               {/* Content */}

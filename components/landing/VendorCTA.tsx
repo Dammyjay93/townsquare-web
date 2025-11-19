@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowUpRight } from 'phosphor-react';
 
 export default function VendorCTA() {
@@ -47,8 +48,13 @@ export default function VendorCTA() {
         </div>
 
         {/* Right: Image - Absolute positioned to break out and extend to viewport edge */}
-        <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-1/2 bg-gradient-to-br from-primary-100 via-slate-100 to-secondary-100">
-          {/* Placeholder for image */}
+        <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-1/2 overflow-hidden">
+          <Image
+            src="/images/grow-your-business.png"
+            alt="Grow your business with TownSquare"
+            fill
+            className="object-cover"
+          />
         </div>
       </div>
     </section>
