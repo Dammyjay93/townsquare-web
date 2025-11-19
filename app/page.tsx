@@ -29,7 +29,7 @@ export default function HomePage() {
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: 'url("https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2069&auto=format&fit=crop")',
+              backgroundImage: 'url("/images/hero-image.png")',
             }}
           ></div>
           {/* Black overlay for depth */}
