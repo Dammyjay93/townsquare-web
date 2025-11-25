@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, CaretDown } from 'phosphor-react';
+import { trackEvents } from '@/lib/posthog';
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
@@ -39,6 +40,7 @@ export default function Hero() {
       >
         <Link
           href="/download"
+          onClick={() => trackEvents.heroCtaClick()}
           className="group inline-flex items-center gap-0 whitespace-nowrap shadow-lg hover:shadow-xl active:scale-100 transition-all duration-100"
           aria-label="Download TownSquare app to find Nigerian service providers"
         >

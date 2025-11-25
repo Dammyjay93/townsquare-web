@@ -6,6 +6,7 @@ import Image from 'next/image';
 import QRCode from 'react-qr-code';
 import Navigation from '@/components/landing/Navigation';
 import Footer from '@/components/landing/Footer';
+import { trackEvents } from '@/lib/posthog';
 
 export default function DownloadPage() {
   const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL || '';
@@ -110,6 +111,7 @@ export default function DownloadPage() {
                   ) : (
                     <a
                       href={isIOS ? appStoreUrl : playStoreUrl}
+                      onClick={() => trackEvents.appStoreClick(isIOS ? 'ios' : 'android')}
                       className="group inline-flex items-center gap-0 shadow-lg hover:shadow-xl transition-all duration-100"
                     >
                       <span className="px-8 py-4 text-base font-semibold tracking-tight text-primary-600 bg-white rounded-l-full rounded-r-full transition-all duration-100 group-hover:bg-white/90 whitespace-nowrap">
@@ -128,6 +130,7 @@ export default function DownloadPage() {
                     {isAppStoreReady ? (
                       <a
                         href={appStoreUrl}
+                        onClick={() => trackEvents.appStoreClick('ios')}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-block hover:opacity-80 transition-opacity"
@@ -157,6 +160,7 @@ export default function DownloadPage() {
                     {isPlayStoreReady ? (
                       <a
                         href={playStoreUrl}
+                        onClick={() => trackEvents.appStoreClick('android')}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-block hover:opacity-80 transition-opacity"

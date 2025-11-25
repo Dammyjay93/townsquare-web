@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowUpRight } from 'phosphor-react';
+import { trackEvents } from '@/lib/posthog';
 
 export default function VendorCTA() {
   return (
@@ -30,7 +31,7 @@ export default function VendorCTA() {
                 </div>
 
                 <div>
-                  <a href="/download" className="group inline-flex items-center gap-0 shadow-lg hover:shadow-xl transition-all duration-100">
+                  <a href="/download" onClick={() => trackEvents.vendorCtaClick()} className="group inline-flex items-center gap-0 shadow-lg hover:shadow-xl transition-all duration-100">
                     <span className="px-8 py-4 text-base font-semibold tracking-tight text-primary-500 bg-white rounded-l-full rounded-r-full transition-all duration-100 group-hover:bg-white/90">
                       List your business
                     </span>

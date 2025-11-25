@@ -1,7 +1,7 @@
 'use client';
 
 import { VendorProfileData } from '@/lib/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ServiceCategoryCard from './ServiceCategoryCard';
 import PhotoGallery from './PhotoGallery';
 import Icon from './Icon';
@@ -9,6 +9,7 @@ import AppPromptModal from './AppPromptModal';
 import ActionCard from './ActionCard';
 import Navigation from './landing/Navigation';
 import QRCode from 'react-qr-code';
+import { trackEvents } from '@/lib/posthog';
 
 interface Props {
   data: VendorProfileData;
@@ -21,6 +22,11 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
   const { vendor, category, district, serviceCategories, allPhotos } = data;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [showBanner, setShowBanner] = useState(true);
+
+  // Track vendor profile view on mount
+  useEffect(() => {
+    trackEvents.vendorProfileView(vendor.id, vendor.business_name);
+  }, [vendor.id, vendor.business_name]);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     actionType: 'whatsapp' | 'instagram' | 'website';
@@ -40,6 +46,7 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
     if (vendor.whatsapp) {
       const cleanNumber = vendor.whatsapp.replace(/[^0-9]/g, '');
       const action = () => {
+        trackEvents.vendorWhatsAppClick(vendor.id, vendor.business_name);
         window.open(
           `https://wa.me/${cleanNumber}?text=Hi ${vendor.business_name}, I found you on TownSquare!`,
           '_blank'
@@ -55,6 +62,7 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
   };
 
   const handleShare = async () => {
+    trackEvents.vendorShareClick(vendor.id, vendor.business_name);
     const shareData = {
       title: vendor.business_name,
       text: `Check out ${vendor.business_name} on TownSquare!`,
@@ -93,6 +101,7 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
     if (vendor.instagram) {
       const instagram = vendor.instagram;
       const action = () => {
+        trackEvents.vendorInstagramClick(vendor.id, vendor.business_name);
         window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank');
       };
 
@@ -109,6 +118,7 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
     if (vendor.website) {
       const website = vendor.website;
       const action = () => {
+        trackEvents.vendorWebsiteClick(vendor.id, vendor.business_name);
         window.open(website.startsWith('http') ? website : `https://${website}`, '_blank');
       };
 
@@ -283,7 +293,10 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-4 z-40">
           <div className="max-w-screen-xl mx-auto flex items-center justify-center gap-3 relative">
             <button
-              onClick={() => window.open(downloadUrl, '_blank')}
+              onClick={() => {
+                trackEvents.downloadBannerClick('vendor_profile');
+                window.open(downloadUrl, '_blank');
+              }}
               className="flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer hidden sm:block"
               aria-label="Download app"
             >
@@ -302,7 +315,10 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
               </p>
             </div>
             <button
-              onClick={() => setShowBanner(false)}
+              onClick={() => {
+                trackEvents.downloadBannerDismiss('vendor_profile');
+                setShowBanner(false);
+              }}
               className="absolute right-0 sm:right-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Close banner"
             >

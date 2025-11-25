@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, List, X } from 'phosphor-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvents } from '@/lib/posthog';
 
 export default function Navigation({ variant = 'default', forceWhiteBg = false }: { variant?: 'default' | 'solid', forceWhiteBg?: boolean }) {
   const [scrollY, setScrollY] = useState(0);
@@ -211,16 +212,16 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
           </div>
 
           <nav className={`hidden md:flex items-center gap-7 text-sm transition-colors duration-500 ${textColor}`}>
-            <Link href="/#why-townsquare" className={`transition-colors ${hoverColor}`}>
+            <Link href="/#why-townsquare" onClick={() => trackEvents.navClick('about', 'header')} className={`transition-colors ${hoverColor}`}>
               About
             </Link>
-            <Link href="/#testimonials" className={`transition-colors ${hoverColor}`}>
+            <Link href="/#testimonials" onClick={() => trackEvents.navClick('testimonials', 'header')} className={`transition-colors ${hoverColor}`}>
               Testimonials
             </Link>
-            <Link href="/#vendors" className={`transition-colors ${hoverColor}`}>
+            <Link href="/#vendors" onClick={() => trackEvents.navClick('vendors', 'header')} className={`transition-colors ${hoverColor}`}>
               Vendors
             </Link>
-            <Link href="/#faq" className={`transition-colors ${hoverColor}`}>
+            <Link href="/#faq" onClick={() => trackEvents.navClick('faq', 'header')} className={`transition-colors ${hoverColor}`}>
               FAQs
             </Link>
           </nav>
@@ -228,6 +229,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
           <div className="flex items-center gap-2">
             <Link
               href="/download"
+              onClick={() => trackEvents.ctaClick('nav_get_app')}
               className="hidden sm:inline-flex group items-center gap-0 transition-all duration-100"
             >
               <span className={`px-4 sm:px-6 py-2.5 text-sm font-semibold tracking-tight transition-all duration-100 rounded-l-full rounded-r-full whitespace-nowrap ${buttonStyles.text} ${buttonStyles.bg} ${buttonStyles.hoverBg} ${buttonStyles.hoverText}`}>
@@ -285,6 +287,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                 <Link
                   href="/#why-townsquare"
                   onClick={() => {
+                    trackEvents.navClick('about', 'mobile_menu');
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
                   }}
@@ -295,6 +298,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                 <Link
                   href="/#testimonials"
                   onClick={() => {
+                    trackEvents.navClick('testimonials', 'mobile_menu');
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
                   }}
@@ -305,6 +309,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                 <Link
                   href="/#vendors"
                   onClick={() => {
+                    trackEvents.navClick('vendors', 'mobile_menu');
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
                   }}
@@ -315,6 +320,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
                 <Link
                   href="/#faq"
                   onClick={() => {
+                    trackEvents.navClick('faq', 'mobile_menu');
                     setIsAnimating(true);
                     setIsMobileMenuOpen(false);
                   }}
@@ -328,6 +334,7 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
               <Link
                 href="/download"
                 onClick={() => {
+                  trackEvents.ctaClick('mobile_menu_get_app');
                   setIsAnimating(true);
                   setIsMobileMenuOpen(false);
                 }}

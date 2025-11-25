@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
@@ -16,11 +17,21 @@ export default function CookieConsent() {
 
   const acceptCookies = () => {
     localStorage.setItem('cookie-consent', 'accepted');
+    // GDPR: Enable tracking only after explicit consent
+    if (posthog.__loaded) {
+      posthog.opt_in_capturing();
+      posthog.capture('$pageview'); // Capture the initial pageview
+      posthog.capture('cookie_consent_accepted');
+    }
     setShowBanner(false);
   };
 
   const declineCookies = () => {
     localStorage.setItem('cookie-consent', 'declined');
+    // GDPR: Ensure tracking remains disabled
+    if (posthog.__loaded) {
+      posthog.opt_out_capturing();
+    }
     setShowBanner(false);
   };
 
