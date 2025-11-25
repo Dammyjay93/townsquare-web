@@ -10,7 +10,7 @@ export const initPostHog = () => {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
     person_profiles: 'identified_only',
-    capture_pageview: true, // Auto-capture page views
+    capture_pageview: false, // Disabled - using manual tracking in PostHogProvider for SPA
     capture_pageleave: true,
     autocapture: true,
     persistence: 'localStorage+cookie',
