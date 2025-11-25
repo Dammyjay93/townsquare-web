@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "S6KA37TYUM.com.mytownsquare.mobile",
+        "paths": [
+          "/*",
+          "NOT /download",
+          "NOT /privacy",
+          "NOT /terms",
+          "NOT /impressum"
+        ]
+      }
+    ]
+  }
+}

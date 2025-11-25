@@ -49,17 +49,17 @@ export default function Footer() {
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Follow</h3>
           <ul className="space-y-3 text-sm text-slate-600">
             <li>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
+              <a href="https://instagram.com/mytownsquare.co" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
                 Instagram
               </a>
             </li>
             <li>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
+              <a href="https://linkedin.com/company/mytownsquare" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
                 LinkedIn
               </a>
             </li>
             <li>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
+              <a href="https://x.com/mytownsquare" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">
                 X
               </a>
             </li>
@@ -91,6 +91,9 @@ export default function Footer() {
             </Link>
             <Link href="/terms" className="hover:text-slate-900 transition-colors">
               Terms
+            </Link>
+            <Link href="/impressum" className="hover:text-slate-900 transition-colors">
+              Impressum
             </Link>
           </div>
         </div>

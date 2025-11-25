@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import Navigation from '@/components/landing/Navigation';
+import Footer from '@/components/landing/Footer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - TownSquare',
@@ -7,14 +9,16 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <>
+      <Navigation forceWhiteBg={true} />
+      <div className="min-h-screen bg-gray-50 pt-28 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-sm p-8 md:p-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
 
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-600 mb-6">
-              <strong>Last Updated:</strong> November 9, 2024
+              <strong>Last Updated:</strong> November 19, 2025
             </p>
 
             <section className="mb-8">
@@ -228,6 +232,8 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }
