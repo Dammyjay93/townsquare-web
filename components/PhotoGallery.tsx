@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import { VendorPhoto } from '@/lib/types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Icon from './Icon';
 
 interface Props {
@@ -23,10 +24,38 @@ export default function PhotoGallery({
 }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const mainImage = photos[0];
   const gridImages = photos.slice(1, 5);
   const currentPhoto = photos[selectedIndex];
+
+  const handleSwipe = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold && mobileIndex < photos.length - 1) {
+      setDirection(1);
+      setMobileIndex(mobileIndex + 1);
+    } else if (info.offset.x > swipeThreshold && mobileIndex > 0) {
+      setDirection(-1);
+      setMobileIndex(mobileIndex - 1);
+    }
+  };
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -281,20 +310,42 @@ export default function PhotoGallery({
       {/* Desktop/Tablet Grid Layout */}
       {renderDesktopGrid()}
 
-      {/* Mobile Layout - Single Hero + Button */}
-      <div className="md:hidden relative h-[280px] rounded-xl overflow-hidden group bg-gray-100">
-        <Image
-          src={mainImage.photo_url}
-          alt={businessName}
-          fill
-          className="object-cover"
-          priority
-          onClick={() => handleImageClick(0)}
-        />
+      {/* Mobile Layout - Swipeable Carousel */}
+      <div className="md:hidden relative h-[280px] rounded-xl overflow-hidden bg-gray-100">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={mobileIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleSwipe}
+            className="absolute inset-0 cursor-grab active:cursor-grabbing"
+            onClick={() => {
+              onSelectPhoto(mobileIndex);
+              setIsExpanded(true);
+            }}
+          >
+            <Image
+              src={photos[mobileIndex].photo_url}
+              alt={`${businessName} - Photo ${mobileIndex + 1}`}
+              fill
+              className="object-cover pointer-events-none"
+              priority={mobileIndex === 0}
+              draggable={false}
+            />
+          </motion.div>
+        </AnimatePresence>
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
 
         {/* Logo Overlay - Mobile */}
-        {logoUrl && (
+        {logoUrl && mobileIndex === 0 && (
           <div className="absolute bottom-12 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
             <div className="relative w-10 h-10">
               <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
@@ -302,13 +353,33 @@ export default function PhotoGallery({
           </div>
         )}
 
+        {/* Dots Indicator */}
+        {photos.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 pointer-events-none">
+            {photos.slice(0, Math.min(photos.length, 5)).map((_, index) => (
+              <div
+                key={index}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  index === mobileIndex ? 'bg-white' : 'bg-white/50'
+                }`}
+              />
+            ))}
+            {photos.length > 5 && (
+              <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+            )}
+          </div>
+        )}
+
         <div className="absolute bottom-3 right-3 pointer-events-auto">
           <button
-            onClick={() => setIsExpanded(true)}
+            onClick={() => {
+              onSelectPhoto(mobileIndex);
+              setIsExpanded(true);
+            }}
             className="bg-white/90 backdrop-blur-sm text-gray-900 px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-sm flex items-center gap-1.5"
           >
             <Icon name="images-outline" size={14} color="#1a3e46" />
-            1/{photos.length}
+            {mobileIndex + 1}/{photos.length}
           </button>
         </div>
       </div>
