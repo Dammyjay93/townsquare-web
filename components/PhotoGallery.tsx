@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { VendorPhoto } from '@/lib/types';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from './Icon';
 
@@ -21,14 +21,12 @@ export default function PhotoGallery({
   onSelectPhoto,
   logoUrl,
 }: Props) {
-  const currentPhoto = photos[selectedIndex];
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const mainImage = photos[0];
+  const gridImages = photos.slice(1, 5);
+  const currentPhoto = photos[selectedIndex];
 
   useEffect(() => {
     setMounted(true);
@@ -36,7 +34,6 @@ export default function PhotoGallery({
 
   useEffect(() => {
     if (isExpanded) {
-      // Prevent scrolling on both html and body
       const scrollY = window.scrollY;
       document.documentElement.style.overflow = 'hidden';
       document.documentElement.style.position = 'fixed';
@@ -48,7 +45,6 @@ export default function PhotoGallery({
       document.body.style.width = '100%';
 
       return () => {
-        // Restore scrolling and position
         document.documentElement.style.overflow = '';
         document.documentElement.style.position = '';
         document.documentElement.style.top = '';
@@ -62,46 +58,6 @@ export default function PhotoGallery({
     }
   }, [isExpanded]);
 
-  // Minimum swipe distance (in px) to trigger navigation
-  const minSwipeDistance = 50;
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(0);
-    setTouchStart(e.targetTouches[0].clientX);
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const currentTouch = e.targetTouches[0].clientX;
-    setTouchEnd(currentTouch);
-    const offset = currentTouch - touchStart;
-    setDragOffset(offset);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) {
-      setIsDragging(false);
-      setDragOffset(0);
-      return;
-    }
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe && selectedIndex < photos.length - 1) {
-      onSelectPhoto(selectedIndex + 1);
-    } else if (isRightSwipe && selectedIndex > 0) {
-      onSelectPhoto(selectedIndex - 1);
-    }
-
-    setIsDragging(false);
-    setDragOffset(0);
-    setTouchStart(0);
-    setTouchEnd(0);
-  };
-
   const goToPrevious = () => {
     if (selectedIndex > 0) {
       onSelectPhoto(selectedIndex - 1);
@@ -114,209 +70,338 @@ export default function PhotoGallery({
     }
   };
 
-  const handleImageClick = () => {
+  const handleImageClick = (index: number) => {
+    onSelectPhoto(index);
     setIsExpanded(true);
   };
 
-  return (
-    <>
-      <div className="relative group">
-        {/* Main Image - Responsive height with swipe support */}
-        <div
-          ref={containerRef}
-          className="relative h-[280px] sm:h-[350px] lg:h-[400px] w-full bg-gray-100 rounded-xl overflow-hidden touch-pan-y cursor-pointer"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onClick={handleImageClick}
-        >
+  // Render desktop grid based on photo count
+  const renderDesktopGrid = () => {
+    const count = photos.length;
+
+    // 1 photo: Single full-width image
+    if (count === 1) {
+      return (
+        <div className="hidden md:block h-[350px] lg:h-[400px] w-full rounded-xl overflow-hidden relative">
           <div
-            className={`relative w-full h-full transition-transform duration-300 ease-out ${
-              isDragging ? 'transition-none' : ''
-            }`}
-            style={{
-              transform: isDragging ? `translateX(${dragOffset}px)` : 'translateX(0)',
-            }}
+            className="w-full h-full relative cursor-pointer group overflow-hidden bg-gray-100"
+            onClick={() => handleImageClick(0)}
           >
             <Image
-              src={currentPhoto.photo_url}
+              src={mainImage.photo_url}
               alt={businessName}
               fill
-              className="object-cover select-none"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               priority
-              draggable={false}
             />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            {logoUrl && (
+              <div className="absolute bottom-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+                <div className="relative w-12 h-12">
+                  <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
+                </div>
+              </div>
+            )}
           </div>
+        </div>
+      );
+    }
 
-          {/* Logo Overlay */}
+    // 2 photos: Two equal columns
+    if (count === 2) {
+      return (
+        <div className="hidden md:grid grid-cols-2 gap-2 h-[350px] lg:h-[400px] w-full rounded-xl overflow-hidden relative">
+          {photos.slice(0, 2).map((img, index) => (
+            <div
+              key={img.id}
+              className="relative cursor-pointer group overflow-hidden bg-gray-100"
+              onClick={() => handleImageClick(index)}
+            >
+              <Image
+                src={img.photo_url}
+                alt={`${businessName} - Photo ${index + 1}`}
+                fill
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                priority={index === 0}
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+              {index === 0 && logoUrl && (
+                <div className="absolute bottom-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+                  <div className="relative w-12 h-12">
+                    <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // 3 photos: Main left (tall, 2/3 width), 2 stacked on right (1/3 width)
+    if (count === 3) {
+      return (
+        <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-2 h-[350px] lg:h-[400px] w-full rounded-xl overflow-hidden relative">
+          <div
+            className="col-span-2 row-span-2 relative cursor-pointer group overflow-hidden bg-gray-100"
+            onClick={() => handleImageClick(0)}
+          >
+            <Image
+              src={photos[0].photo_url}
+              alt={businessName}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            {logoUrl && (
+              <div className="absolute bottom-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+                <div className="relative w-12 h-12">
+                  <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
+                </div>
+              </div>
+            )}
+          </div>
+          {photos.slice(1, 3).map((img, index) => (
+            <div
+              key={img.id}
+              className="relative cursor-pointer group overflow-hidden bg-gray-100"
+              onClick={() => handleImageClick(index + 1)}
+            >
+              <Image
+                src={img.photo_url}
+                alt={`${businessName} - Photo ${index + 2}`}
+                fill
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // 4 photos: Main top (wide), 3 below in a row
+    if (count === 4) {
+      return (
+        <div className="hidden md:grid grid-cols-3 grid-rows-[2fr_1fr] gap-2 h-[400px] lg:h-[450px] w-full rounded-xl overflow-hidden relative">
+          <div
+            className="col-span-3 relative cursor-pointer group overflow-hidden bg-gray-100"
+            onClick={() => handleImageClick(0)}
+          >
+            <Image
+              src={photos[0].photo_url}
+              alt={businessName}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            {logoUrl && (
+              <div className="absolute bottom-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+                <div className="relative w-12 h-12">
+                  <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
+                </div>
+              </div>
+            )}
+          </div>
+          {photos.slice(1, 4).map((img, index) => (
+            <div
+              key={img.id}
+              className="relative cursor-pointer group overflow-hidden bg-gray-100"
+              onClick={() => handleImageClick(index + 1)}
+            >
+              <Image
+                src={img.photo_url}
+                alt={`${businessName} - Photo ${index + 2}`}
+                fill
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // 5+ photos: Airbnb-style grid
+    return (
+      <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[400px] lg:h-[450px] w-full rounded-xl overflow-hidden relative">
+        <div
+          className="col-span-2 row-span-2 relative cursor-pointer group overflow-hidden bg-gray-100"
+          onClick={() => handleImageClick(0)}
+        >
+          <Image
+            src={mainImage.photo_url}
+            alt={businessName}
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
           {logoUrl && (
-            <div className="absolute bottom-6 left-6 p-3 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg pointer-events-none">
-              <div className="relative w-16 h-16">
+            <div className="absolute bottom-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+              <div className="relative w-12 h-12">
                 <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
               </div>
             </div>
           )}
+        </div>
+        {gridImages.map((img, index) => (
+          <div
+            key={img.id}
+            className="relative cursor-pointer group overflow-hidden bg-gray-100"
+            onClick={() => handleImageClick(index + 1)}
+          >
+            <Image
+              src={img.photo_url}
+              alt={`${businessName} - Photo ${index + 2}`}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+          </div>
+        ))}
+        {photos.length > 5 && (
+          <div className="absolute bottom-4 right-4 z-10">
+            <button
+              onClick={() => setIsExpanded(true)}
+              className="bg-white text-gray-900 px-4 py-2 rounded-full text-xs font-semibold shadow-sm hover:shadow transition-all border border-gray-200"
+            >
+              Show all photos
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
-          {/* Navigation Arrows - Desktop & Tablet */}
-          {photos.length > 1 && (
-            <>
-              {/* Left Arrow */}
-              {selectedIndex > 0 && (
+  return (
+    <>
+      {/* Desktop/Tablet Grid Layout */}
+      {renderDesktopGrid()}
+
+      {/* Mobile Layout - Single Hero + Button */}
+      <div className="md:hidden relative h-[280px] rounded-xl overflow-hidden group bg-gray-100">
+        <Image
+          src={mainImage.photo_url}
+          alt={businessName}
+          fill
+          className="object-cover"
+          priority
+          onClick={() => handleImageClick(0)}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+
+        {/* Logo Overlay - Mobile */}
+        {logoUrl && (
+          <div className="absolute bottom-12 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md pointer-events-none">
+            <div className="relative w-10 h-10">
+              <Image src={logoUrl} alt={`${businessName} logo`} fill className="object-contain" />
+            </div>
+          </div>
+        )}
+
+        <div className="absolute bottom-3 right-3 pointer-events-auto">
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="bg-white/90 backdrop-blur-sm text-gray-900 px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-sm flex items-center gap-1.5"
+          >
+            <Icon name="images-outline" size={14} color="#1a3e46" />
+            1/{photos.length}
+          </button>
+        </div>
+      </div>
+
+      {/* Lightbox Modal */}
+      {mounted &&
+        isExpanded &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] bg-white flex flex-col overflow-hidden"
+            style={{
+              height: '100dvh',
+              width: '100vw',
+            }}
+          >
+            {/* Lightbox Header */}
+            <div
+              className="flex items-center justify-between py-3 px-4 bg-white flex-shrink-0"
+              style={{ borderBottom: '0.5px solid #e5e7eb' }}
+            >
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="w-10 h-10 hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors"
+                aria-label="Close gallery"
+              >
+                <Icon name="close" size={22} color="#1a3e46" />
+              </button>
+              <span className="font-medium text-sm text-gray-500">
+                {selectedIndex + 1} of {photos.length}
+              </span>
+              <div className="w-10" />
+            </div>
+
+            {/* Main Viewer */}
+            <div className="flex-1 overflow-hidden relative flex items-center justify-center bg-gray-50">
+              {/* Navigation Arrows */}
+              {photos.length > 1 && selectedIndex > 0 && (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToPrevious();
-                  }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all sm:opacity-0 sm:group-hover:opacity-100 opacity-100 active:scale-95"
+                  onClick={goToPrevious}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10"
                   aria-label="Previous photo"
                 >
                   <Icon name="chevron-back" size={20} color="#1a3e46" />
                 </button>
               )}
 
-              {/* Right Arrow */}
-              {selectedIndex < photos.length - 1 && (
+              <div className="relative w-full h-full max-w-4xl">
+                <Image
+                  src={currentPhoto.photo_url}
+                  alt={businessName}
+                  fill
+                  className="object-contain p-4"
+                />
+              </div>
+
+              {photos.length > 1 && selectedIndex < photos.length - 1 && (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToNext();
-                  }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all sm:opacity-0 sm:group-hover:opacity-100 opacity-100 active:scale-95"
+                  onClick={goToNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10"
                   aria-label="Next photo"
                 >
                   <Icon name="chevron-forward" size={20} color="#1a3e46" />
                 </button>
               )}
-            </>
-          )}
-
-        {/* Pagination Dots */}
-        {photos.length > 1 && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
-            {photos.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => onSelectPhoto(index)}
-                className="p-1 touch-manipulation"
-                aria-label={`View photo ${index + 1}`}
-              >
-                <div
-                  className={`rounded-full transition-all ${
-                    index === selectedIndex
-                      ? 'bg-white w-6 h-1.5'
-                      : 'bg-white/60 w-1.5 h-1.5'
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-        {/* Thumbnail Strip */}
-        {photos.length > 1 && (
-          <div className="flex gap-2 mt-3 overflow-x-auto">
-            {photos.map((photo, index) => (
-              <button
-                key={photo.id}
-                onClick={() => onSelectPhoto(index)}
-                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition ${
-                  index === selectedIndex
-                    ? 'border-blue-500'
-                    : 'border-transparent hover:border-gray-300'
-                }`}
-              >
-                <Image
-                  src={photo.photo_url}
-                  alt={`${businessName} - Photo ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Expanded Image Modal - Using Portal */}
-      {mounted && isExpanded && createPortal(
-        <div
-          className="fixed inset-0 z-[9999] bg-black overflow-hidden overscroll-none"
-          style={{
-            height: '100dvh',
-            width: '100vw',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            touchAction: 'none',
-          }}
-          onClick={() => setIsExpanded(false)}
-          onTouchMove={(e) => {
-            // Prevent any scrolling in the modal
-            e.preventDefault();
-          }}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsExpanded(false);
-            }}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all z-10"
-            aria-label="Close expanded view"
-          >
-            <Icon name="close" size={24} color="white" />
-          </button>
-
-          <div className="relative w-full h-full flex items-center justify-center p-4">
-            <div className="relative w-full h-full max-w-5xl max-h-full">
-              <Image
-                src={currentPhoto.photo_url}
-                alt={businessName}
-                fill
-                className="object-contain"
-                onClick={(e) => e.stopPropagation()}
-              />
             </div>
-          </div>
 
-          {/* Navigation in expanded view */}
-          {photos.length > 1 && (
-            <>
-              {selectedIndex > 0 && (
+            {/* Thumbnails Strip */}
+            <div
+              className="h-20 bg-white flex items-center px-4 gap-2 overflow-x-auto flex-shrink-0"
+              style={{ borderTop: '0.5px solid #e5e7eb' }}
+            >
+              {photos.map((img, index) => (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToPrevious();
-                  }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
-                  aria-label="Previous photo"
+                  key={img.id}
+                  onClick={() => onSelectPhoto(index)}
+                  className={`relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 transition-all border-2 ${
+                    selectedIndex === index
+                      ? 'border-primary-500 opacity-100'
+                      : 'border-transparent opacity-60 hover:opacity-100'
+                  }`}
                 >
-                  <Icon name="chevron-back" size={24} color="white" />
+                  <Image
+                    src={img.photo_url}
+                    alt={`${businessName} - Thumbnail ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
                 </button>
-              )}
-
-              {selectedIndex < photos.length - 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToNext();
-                  }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
-                  aria-label="Next photo"
-                >
-                  <Icon name="chevron-forward" size={24} color="white" />
-                </button>
-              )}
-            </>
-          )}
-
-          {/* Photo counter */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm">
-            {selectedIndex + 1} / {photos.length}
-          </div>
-        </div>,
-        document.body
-      )}
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 }

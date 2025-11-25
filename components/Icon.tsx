@@ -1,8 +1,78 @@
 // TownSquare Icon Component - Phosphor Icons Wrapper (Web)
 // Matches mobile implementation exactly
+'use client';
 
 import React from 'react';
-import * as Phosphor from 'phosphor-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CaretLeft,
+  CaretRight,
+  CaretDown,
+  CaretUp,
+  X,
+  XCircle,
+  Check,
+  CheckCircle,
+  MagnifyingGlass,
+  Heart,
+  Star,
+  MapPin,
+  Image,
+  GridFour,
+  ShieldCheck,
+  InstagramLogo,
+  WhatsappLogo,
+  Globe,
+  ShareNetwork,
+  Clock,
+  Question,
+  IconProps as PhosphorIconProps,
+} from 'phosphor-react';
+
+// Icon component map - explicit imports to avoid SSR issues
+const iconComponents: Record<string, React.ComponentType<PhosphorIconProps>> = {
+  // Navigation
+  ArrowLeft,
+  ArrowRight,
+  CaretLeft,
+  CaretRight,
+  CaretDown,
+  CaretUp,
+
+  // Actions
+  X,
+  XCircle,
+  Check,
+  CheckCircle,
+
+  // Common
+  MagnifyingGlass,
+  Heart,
+  Star,
+
+  // Location
+  MapPin,
+
+  // Media
+  Image,
+  GridFour,
+
+  // Verification
+  ShieldCheck,
+
+  // Communication
+  InstagramLogo,
+  WhatsappLogo,
+  Globe,
+  ShareNetwork,
+
+  // Time
+  Clock,
+
+  // Fallback
+  Question,
+};
 
 // Icon name mapping from Ionicons to Phosphor (same as mobile)
 const iconNameMap: Record<string, string> = {
@@ -20,12 +90,27 @@ const iconNameMap: Record<string, string> = {
   'x-circle': 'XCircle',
   checkmark: 'Check',
   'checkmark-circle': 'CheckCircle',
+  'checkmark-circle-outline': 'CheckCircle',
 
   // Common
   search: 'MagnifyingGlass',
   heart: 'Heart',
   'heart-outline': 'Heart',
   star: 'Star',
+
+  // Location
+  location: 'MapPin',
+  'location-outline': 'MapPin',
+
+  // Media
+  images: 'Image',
+  'images-outline': 'Image',
+  grid: 'GridFour',
+  'grid-outline': 'GridFour',
+
+  // Verification
+  'shield-checkmark': 'ShieldCheck',
+  'shield-check': 'ShieldCheck',
 
   // Communication
   'logo-instagram': 'InstagramLogo',
@@ -50,11 +135,6 @@ interface IconProps {
   className?: string;
 }
 
-const ICON_FALLBACK = {
-  component: Phosphor.Question,
-  key: 'Question',
-};
-
 export default function Icon({
   name,
   size = 24,
@@ -62,21 +142,14 @@ export default function Icon({
   weight = 'regular',
   className,
 }: IconProps) {
-  const iconLibrary = Phosphor as unknown as Record<
-    string,
-    React.ComponentType<Phosphor.IconProps>
-  >;
-
   // Map the icon name
   const mappedName = iconNameMap[name] || name;
 
   // Resolve the icon component
-  const ResolvedIcon = iconLibrary[mappedName] || ICON_FALLBACK.component;
+  const ResolvedIcon = iconComponents[mappedName] || Question;
 
-  if (!iconLibrary[mappedName]) {
-    console.warn(
-      `Icon "${mappedName}" not found in Phosphor. Using fallback "${ICON_FALLBACK.key}".`
-    );
+  if (!iconComponents[mappedName]) {
+    console.warn(`Icon "${mappedName}" not found. Using fallback "Question".`);
   }
 
   return <ResolvedIcon size={size} color={color} weight={weight} className={className} />;

@@ -17,6 +17,7 @@ export interface VendorPublic {
   latitude: number | null;
   longitude: number | null;
   logo_url: string | null;
+  approved_at: string | null;
 }
 
 export interface Category {

@@ -1,22 +1,26 @@
 'use client';
 
 import { VendorProfileData } from '@/lib/types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ServiceCategoryCard from './ServiceCategoryCard';
 import PhotoGallery from './PhotoGallery';
 import Icon from './Icon';
 import AppPromptModal from './AppPromptModal';
+import ActionCard from './ActionCard';
+import Navigation from './landing/Navigation';
 import QRCode from 'react-qr-code';
 
 interface Props {
   data: VendorProfileData;
+  rating?: number;
+  reviewCount?: number;
+  verified?: boolean;
 }
 
-export default function VendorProfile({ data }: Props) {
+export default function VendorProfile({ data, rating, reviewCount, verified = false }: Props) {
   const { vendor, category, district, serviceCategories, allPhotos } = data;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     actionType: 'whatsapp' | 'instagram' | 'website';
@@ -27,21 +31,10 @@ export default function VendorProfile({ data }: Props) {
     pendingAction: null,
   });
 
-  const downloadUrl = typeof window !== 'undefined'
-    ? `${window.location.protocol}//${window.location.host}/download`
-    : '/download';
-
-  useEffect(() => {
-    const checkDevice = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
-
-    return () => window.removeEventListener('resize', checkDevice);
-  }, []);
+  const downloadUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.protocol}//${window.location.host}/download`
+      : '/download';
 
   const handleWhatsAppClick = () => {
     if (vendor.whatsapp) {
@@ -53,7 +46,6 @@ export default function VendorProfile({ data }: Props) {
         );
       };
 
-      // Always show modal to prompt app download
       setModalState({
         isOpen: true,
         actionType: 'whatsapp',
@@ -76,7 +68,6 @@ export default function VendorProfile({ data }: Props) {
         console.error('Error sharing:', err);
       }
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
     }
@@ -105,7 +96,6 @@ export default function VendorProfile({ data }: Props) {
         window.open(`https://instagram.com/${instagram.replace('@', '')}`, '_blank');
       };
 
-      // Always show modal to prompt app download
       setModalState({
         isOpen: true,
         actionType: 'instagram',
@@ -122,7 +112,6 @@ export default function VendorProfile({ data }: Props) {
         window.open(website.startsWith('http') ? website : `https://${website}`, '_blank');
       };
 
-      // Always show modal to prompt app download
       setModalState({
         isOpen: true,
         actionType: 'website',
@@ -131,291 +120,199 @@ export default function VendorProfile({ data }: Props) {
     }
   };
 
-  // Helper component to render blurred text
-  const BlurredText = ({ text, className = '' }: { text: string; className?: string }) => {
-    return (
-      <span className={className} style={{ filter: 'blur(4px)', userSelect: 'none' }}>
-        {text}
-      </span>
-    );
-  };
-
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f8fafb' }}>
-      {/* Header with Logo and Share Button */}
-      <header className="pt-6 sm:pt-8 pb-4">
-        <div className="max-w-[960px] mx-auto px-4 lg:px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                <span className="text-gray-500 font-bold text-xs">TS</span>
-              </div>
-              <span className="text-base sm:text-lg font-bold text-gray-900">Townsquare</span>
-            </div>
-            {/* Share Button - Increased touch target */}
-            <button
-              onClick={handleShare}
-              className="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow touch-manipulation"
-              aria-label="Share profile"
-            >
-              <Icon name="share-social-outline" size={20} color="#1a3e46" />
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <Navigation forceWhiteBg />
 
-      {/* Main Content - Responsive layout */}
-      <div className="max-w-[960px] mx-auto px-4 lg:px-6 pb-4 lg:pb-6">
-        <div className="bg-white rounded-xl shadow-sm w-full" style={{ border: '0.5px solid #e5e7eb' }}>
-          {/* Mobile: Single column with natural flow */}
-          {/* Desktop: Two columns with fixed height */}
-          <div
-            className={`${
-              isDesktop ? 'grid grid-cols-2 gap-6 overflow-hidden' : 'flex flex-col'
-            } pt-5 px-5 lg:pt-6 lg:px-6`}
-            style={isDesktop ? { height: 'calc(100vh - 220px)', maxHeight: '800px' } : {}}
-          >
-            {/* Mobile: Business Info First (better UX) */}
-            {!isDesktop && (
-              <div className="mb-5 order-1">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
-                {district && (
-                  <div className="mb-2">
-                    <p className="text-sm text-gray-600">
-                      {district.name}
-                      {vendor.postal_code && `, ${vendor.postal_code}`}
-                      {district.city && ` ${district.city}`}
-                    </p>
-                  </div>
-                )}
-                {category && (
-                  <div className="inline-block">
+      {/* Main Content - with top padding for fixed nav */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-6 sm:space-y-8">
+        {/* Gallery - Full Width */}
+        {allPhotos.length > 0 && (
+          <PhotoGallery
+            photos={allPhotos}
+            businessName={vendor.business_name}
+            selectedIndex={selectedPhotoIndex}
+            onSelectPhoto={setSelectedPhotoIndex}
+            logoUrl={vendor.logo_url}
+          />
+        )}
+
+        {/* Content Grid */}
+        <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+          {/* Main Content - Left Column */}
+          <div className="flex-1 min-w-0 space-y-6">
+            {/* Header Info */}
+            <div className="space-y-3">
+              {/* Badges Row */}
+              {(category || verified) && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  {category && (
                     <span className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-xs text-gray-700">
                       {category.name}
                     </span>
+                  )}
+                  {verified && (
+                    <span className="inline-flex items-center gap-1 text-success-700 text-xs font-medium px-2 py-0.5 rounded-full bg-success-50">
+                      <Icon name="shield-checkmark" size={12} color="#15803d" /> Verified
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Title */}
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
+                {vendor.business_name}
+              </h1>
+
+              {/* Location + Rating Row */}
+              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                {district && (
+                  <div className="flex items-center gap-1">
+                    <Icon name="location-outline" size={14} color="#78716c" />
+                    <span>
+                      {district.name}
+                      {vendor.postal_code && `, ${vendor.postal_code}`}
+                      {district.city && ` ${district.city}`}
+                    </span>
                   </div>
                 )}
+                {rating && reviewCount && (
+                  <>
+                    <div className="hidden sm:block w-1 h-1 bg-gray-300 rounded-full" />
+                    <div className="flex items-center gap-1 text-gray-900 font-medium">
+                      <Icon name="star" size={14} color="#1a3e46" />
+                      <span>{rating}</span>
+                      <span className="text-gray-500 font-normal underline decoration-gray-300 underline-offset-2">
+                        ({reviewCount} reviews)
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* About Section */}
+            {vendor.description && (
+              <div className="pt-6" style={{ borderTop: '0.5px solid #eeeeec' }}>
+                <h2 className="text-base font-bold text-gray-900 mb-2">About</h2>
+                <p className="text-sm text-gray-700 leading-relaxed">{vendor.description}</p>
               </div>
             )}
 
-            {/* Photo Gallery */}
-            <div className={`${!isDesktop ? 'mb-5 order-2' : 'overflow-hidden'}`}>
-              {allPhotos.length > 0 && (
-                <PhotoGallery
-                  photos={allPhotos}
-                  businessName={vendor.business_name}
-                  selectedIndex={selectedPhotoIndex}
-                  onSelectPhoto={setSelectedPhotoIndex}
-                  logoUrl={vendor.logo_url}
+            {/* Specialties */}
+            {vendor.services && vendor.services.length > 0 && (
+              <div className="pt-6" style={{ borderTop: '0.5px solid #eeeeec' }}>
+                <h2 className="text-base font-bold text-gray-900 mb-3">Specialties</h2>
+                <div className="flex flex-wrap gap-1.5">
+                  {vendor.services.slice(0, 10).map((service, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-100 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-700"
+                    >
+                      {service}
+                    </span>
+                  ))}
+                  {vendor.services.length > 10 && (
+                    <span className="bg-gray-100 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-600">
+                      +{vendor.services.length - 10} more
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Services & Pricing */}
+            {serviceCategories.length > 0 && (
+              <div className="pt-6" style={{ borderTop: '0.5px solid #eeeeec' }}>
+                <h2 className="text-base font-bold text-gray-900 mb-3">Services & Pricing</h2>
+                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                  {serviceCategories.map((serviceCategory, index) => (
+                    <div key={serviceCategory.id}>
+                      <ServiceCategoryCard serviceCategory={serviceCategory} />
+                      {index < serviceCategories.length - 1 && (
+                        <div className="h-px" style={{ backgroundColor: '#eeeeec' }} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Mobile: ActionCard (shown inline on mobile) */}
+            {(vendor.instagram || vendor.website || vendor.whatsapp) && (
+              <div className="md:hidden pt-6" style={{ borderTop: '0.5px solid #eeeeec' }}>
+                <ActionCard
+                  vendorName={vendor.business_name}
+                  instagram={vendor.instagram}
+                  website={vendor.website}
+                  whatsapp={vendor.whatsapp}
+                  memberSince={vendor.approved_at}
+                  onInstagramClick={handleInstagramClick}
+                  onWebsiteClick={handleWebsiteClick}
+                  onWhatsAppClick={handleWhatsAppClick}
+                  onShare={handleShare}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar - Right Column (Desktop only) */}
+          <div className="hidden md:block w-[380px] flex-shrink-0 relative">
+            <div className="sticky top-24">
+              {(vendor.instagram || vendor.website || vendor.whatsapp) && (
+                <ActionCard
+                  vendorName={vendor.business_name}
+                  instagram={vendor.instagram}
+                  website={vendor.website}
+                  whatsapp={vendor.whatsapp}
+                  memberSince={vendor.approved_at}
+                  onInstagramClick={handleInstagramClick}
+                  onWebsiteClick={handleWebsiteClick}
+                  onWhatsAppClick={handleWhatsAppClick}
+                  onShare={handleShare}
                 />
               )}
             </div>
-
-            {/* Content - Scrollable on desktop, natural flow on mobile */}
-            <div className={`${isDesktop ? 'overflow-y-auto pr-2' : 'order-3'}`}>
-              {/* Desktop: Business Info */}
-              {isDesktop && (
-                <div className="mb-5">
-                  <h1 className="text-2xl font-bold text-gray-900 mb-2">{vendor.business_name}</h1>
-                  {district && (
-                    <div className="mb-2">
-                      <p className="text-sm text-gray-600">
-                        {district.name}
-                        {vendor.postal_code && `, ${vendor.postal_code}`}
-                        {district.city && ` ${district.city}`}
-                      </p>
-                    </div>
-                  )}
-                  {category && (
-                    <div className="inline-block">
-                      <span className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-xs text-gray-700">
-                        {category.name}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* About Section */}
-              {vendor.description && (
-                <div className="mb-5">
-                  <h2 className="text-base font-bold text-gray-900 mb-2">About</h2>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    {vendor.description}
-                  </p>
-                </div>
-              )}
-
-              {/* Specialties */}
-              {vendor.services && vendor.services.length > 0 && (
-                <div className="mb-5">
-                  <h2 className="text-base font-bold text-gray-900 mb-3">Specialties</h2>
-                  <div className="flex flex-wrap gap-1.5">
-                    {vendor.services.slice(0, 10).map((service, index) => (
-                      <span
-                        key={index}
-                        className="bg-gray-100 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-700"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                    {vendor.services.length > 10 && (
-                      <span className="bg-gray-100 border border-gray-200 rounded-full px-2.5 py-1 text-xs text-gray-600">
-                        +{vendor.services.length - 10} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Services & Pricing */}
-              {serviceCategories.length > 0 && (
-                <div className="mb-5">
-                  <div className="mb-3">
-                    <h2 className="text-base font-bold text-gray-900">Services & Pricing</h2>
-                  </div>
-                  <div>
-                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                      {serviceCategories.map((serviceCategory, index) => (
-                        <div key={serviceCategory.id}>
-                          <ServiceCategoryCard serviceCategory={serviceCategory} />
-                          {index < serviceCategories.length - 1 && (
-                            <div className="h-px" style={{ backgroundColor: '#eeeeec' }} />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Connect Section */}
-              {(vendor.instagram || vendor.website) && (
-                <div className="mb-5">
-                  <h2 className="text-base font-bold text-gray-900 mb-3">Connect</h2>
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    {vendor.instagram && (
-                      <>
-                        <a
-                          href={`https://instagram.com/${vendor.instagram.replace('@', '')}`}
-                          onClick={handleInstagramClick}
-                          className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors active:bg-gray-100 touch-manipulation"
-                        >
-                          <div
-                            className="w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-white"
-                            style={{
-                              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                              borderWidth: 0.5,
-                              borderColor: '#eeeeec',
-                              borderStyle: 'solid',
-                            }}
-                          >
-                            <Icon name="logo-instagram" size={20} color="#1a3e46" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-500 mb-1">Instagram</p>
-                            <BlurredText text={vendor.instagram} className="text-base text-gray-900" />
-                          </div>
-                          <Icon name="chevron-forward" size={20} color="#a8a29e" />
-                        </a>
-                        {vendor.website && (
-                          <div className="h-px" style={{ backgroundColor: '#eeeeec' }} />
-                        )}
-                      </>
-                    )}
-
-                    {vendor.website && (
-                      <a
-                        href={
-                          vendor.website.startsWith('http')
-                            ? vendor.website
-                            : `https://${vendor.website}`
-                        }
-                        onClick={handleWebsiteClick}
-                        className="flex flex-row items-center p-4 hover:bg-gray-50 transition-colors active:bg-gray-100 touch-manipulation"
-                      >
-                        <div
-                          className="w-10 h-10 rounded-full flex items-center justify-center mr-3 bg-white"
-                          style={{
-                            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                            borderWidth: 0.5,
-                            borderColor: '#eeeeec',
-                            borderStyle: 'solid',
-                          }}
-                        >
-                          <Icon name="globe-outline" size={20} color="#1a3e46" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-500 mb-1">Website</p>
-                          <BlurredText text={vendor.website} className="text-base text-gray-900 block truncate" />
-                        </div>
-                        <Icon
-                          name="chevron-forward"
-                          size={20}
-                          color="#a8a29e"
-                          className="flex-shrink-0"
-                        />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* WhatsApp Button - Better touch target */}
-              {vendor.whatsapp && (
-                <div className="mt-6 mb-5">
-                  <button
-                    onClick={handleWhatsAppClick}
-                    className="w-full bg-primary-500 text-white rounded-full flex items-center justify-center font-semibold text-sm hover:bg-primary-600 active:opacity-80 transition-all touch-manipulation"
-                    style={{ height: '48px', minHeight: '48px' }}
-                  >
-                    <Icon name="logo-whatsapp" size={20} color="white" className="mr-2" />
-                    Send a message
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Footer - Smart rendering based on device */}
-          <div className="border-t border-gray-100 py-3 px-4">
-            {isDesktop ? (
-              // Desktop: QR Code + Browse more vendors
-              <div className="flex items-center justify-center gap-2">
-                <button
-                  onClick={() => window.open(downloadUrl, '_blank')}
-                  className="flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer"
-                  aria-label="Download app"
-                >
-                  <div className="inline-block p-1 bg-white border border-gray-200 rounded-sm">
-                    <QRCode
-                      value={downloadUrl}
-                      size={32}
-                      fgColor="#1F4A54"
-                    />
-                  </div>
-                </button>
-                <div className="flex flex-col justify-center">
-                  <p className="text-xs font-semibold text-gray-700">Browse more vendors in the app</p>
-                  <p className="text-2xs text-gray-500">Scan or click to download</p>
-                </div>
-              </div>
-            ) : (
-              // Mobile: Download button
-              <div className="text-center">
-                <a
-                  href={downloadUrl}
-                  className="text-xs font-semibold text-gray-900 hover:text-gray-700 transition-colors"
-                >
-                  Get the app
-                </a>
-              </div>
-            )}
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* App Prompt Modal - Shown on all devices to encourage app download */}
+      {/* Footer Banner */}
+      {showBanner && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-4 z-40">
+          <div className="max-w-screen-xl mx-auto flex items-center justify-center gap-3 relative">
+            <button
+              onClick={() => window.open(downloadUrl, '_blank')}
+              className="flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer hidden sm:block"
+              aria-label="Download app"
+            >
+              <div className="inline-block p-1 bg-white border border-gray-200 rounded-sm">
+                <QRCode value={downloadUrl} size={32} fgColor="#1F4A54" />
+              </div>
+            </button>
+            <div className="flex flex-col justify-center">
+              <p className="text-xs sm:text-sm font-semibold text-gray-900">
+                Browse more vendors in the app
+              </p>
+              <p className="text-2xs sm:text-xs text-gray-500">
+                <a href={downloadUrl} className="hover:underline">
+                  Download TownSquare
+                </a>
+              </p>
+            </div>
+            <button
+              onClick={() => setShowBanner(false)}
+              className="absolute right-0 sm:right-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close banner"
+            >
+              <Icon name="close" size={18} color="#78716c" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* App Prompt Modal */}
       <AppPromptModal
         isOpen={modalState.isOpen}
         onClose={handleModalClose}

@@ -205,12 +205,9 @@ export default function Navigation({ variant = 'default', forceWhiteBg = false }
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 shadow-lg shadow-primary-500/40">
               <span className="text-sm font-semibold tracking-tight text-white">TS</span>
             </div>
-            <div className="flex flex-col">
-              <span className={`text-sm font-semibold tracking-tight transition-colors duration-500 ${textColor}`}>
-                TownSquare
-              </span>
-              <span className={`hidden md:block text-xs transition-colors duration-500 ${textSecondaryColor}`}>Find Nigerian services in Berlin</span>
-            </div>
+            <span className={`text-sm font-semibold tracking-tight transition-colors duration-500 ${textColor}`}>
+              TownSquare
+            </span>
           </div>
 
           <nav className={`hidden md:flex items-center gap-7 text-sm transition-colors duration-500 ${textColor}`}>
