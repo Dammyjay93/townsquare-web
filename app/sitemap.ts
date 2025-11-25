@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import * as Sentry from '@sentry/nextjs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -63,6 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return [...routes, ...vendorRoutes];
     }
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: { location: 'sitemap_generation' },
+      level: 'error',
+    });
     console.error('Error generating sitemap:', error);
   }
 

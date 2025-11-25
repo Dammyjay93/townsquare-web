@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import { Warning, ArrowCounterClockwise } from 'phosphor-react';
 
 export default function Error({
@@ -11,8 +12,8 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error('Application error:', error);
+    // Capture the error in Sentry
+    Sentry.captureException(error);
   }, [error]);
 
   return (

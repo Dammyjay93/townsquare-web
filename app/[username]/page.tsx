@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import * as Sentry from '@sentry/nextjs';
 import { supabase } from '@/lib/supabase';
 import {
   VendorPublic,
@@ -35,6 +36,17 @@ async function getVendorData(username: string): Promise<VendorProfileData | null
 
   if (vendorError || !vendor) {
     if (vendorError) {
+      Sentry.captureException(new Error(vendorError.message), {
+        tags: {
+          location: 'vendor_profile_fetch',
+          error_code: vendorError.code,
+        },
+        extra: {
+          username,
+          details: vendorError.details,
+        },
+        level: 'warning',
+      });
       console.error('Error fetching vendor:', {
         username,
         error: vendorError.message,

@@ -2,6 +2,7 @@
 
 import { VendorProfileData } from '@/lib/types';
 import { useState, useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import ServiceCategoryCard from './ServiceCategoryCard';
 import PhotoGallery from './PhotoGallery';
 import Icon from './Icon';
@@ -23,10 +24,28 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [showBanner, setShowBanner] = useState(true);
 
-  // Track vendor profile view on mount
+  // Track vendor profile view and set Sentry context on mount
   useEffect(() => {
+    // Set Sentry context for better error tracking
+    Sentry.setTag('page', 'vendor_profile');
+    Sentry.setContext('vendor', {
+      id: vendor.id,
+      username: vendor.username,
+      business_name: vendor.business_name,
+    });
+    Sentry.addBreadcrumb({
+      category: 'navigation',
+      message: `Viewed vendor profile: ${vendor.business_name}`,
+      level: 'info',
+    });
+
     trackEvents.vendorProfileView(vendor.id, vendor.business_name);
-  }, [vendor.id, vendor.business_name]);
+
+    return () => {
+      // Clear context when leaving
+      Sentry.setContext('vendor', null);
+    };
+  }, [vendor.id, vendor.username, vendor.business_name]);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     actionType: 'whatsapp' | 'instagram' | 'website';
@@ -73,7 +92,13 @@ export default function VendorProfile({ data, rating, reviewCount, verified = fa
       try {
         await navigator.share(shareData);
       } catch (err) {
-        console.error('Error sharing:', err);
+        // User cancelled share is not an error
+        if ((err as Error).name !== 'AbortError') {
+          Sentry.captureException(err, {
+            tags: { location: 'vendor_share', vendor_id: vendor.id },
+          });
+          console.error('Error sharing:', err);
+        }
       }
     } else {
       navigator.clipboard.writeText(window.location.href);
