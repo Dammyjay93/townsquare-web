@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { VendorPhoto } from '@/lib/types';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import Icon from './Icon';
 
 interface Props {
@@ -25,36 +24,22 @@ export default function PhotoGallery({
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [mobileIndex, setMobileIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const mainImage = photos[0];
   const gridImages = photos.slice(1, 5);
   const currentPhoto = photos[selectedIndex];
 
-  const handleSwipe = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const swipeThreshold = 50;
-    if (info.offset.x < -swipeThreshold && mobileIndex < photos.length - 1) {
-      setDirection(1);
-      setMobileIndex(mobileIndex + 1);
-    } else if (info.offset.x > swipeThreshold && mobileIndex > 0) {
-      setDirection(-1);
-      setMobileIndex(mobileIndex - 1);
+  // Handle scroll to update current index
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const scrollLeft = container.scrollLeft;
+    const itemWidth = container.offsetWidth;
+    const newIndex = Math.round(scrollLeft / itemWidth);
+    if (newIndex !== mobileIndex && newIndex >= 0 && newIndex < photos.length) {
+      setMobileIndex(newIndex);
     }
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 0,
-    }),
   };
 
   useEffect(() => {
@@ -310,37 +295,33 @@ export default function PhotoGallery({
       {/* Desktop/Tablet Grid Layout */}
       {renderDesktopGrid()}
 
-      {/* Mobile Layout - Swipeable Carousel */}
+      {/* Mobile Layout - Native Scroll Snap Carousel */}
       <div className="md:hidden relative h-[280px] rounded-xl overflow-hidden bg-gray-100">
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
-          <motion.div
-            key={mobileIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragEnd={handleSwipe}
-            className="absolute inset-0 cursor-grab active:cursor-grabbing"
-            onClick={() => {
-              onSelectPhoto(mobileIndex);
-              setIsExpanded(true);
-            }}
-          >
-            <Image
-              src={photos[mobileIndex].photo_url}
-              alt={`${businessName} - Photo ${mobileIndex + 1}`}
-              fill
-              className="object-cover pointer-events-none"
-              priority={mobileIndex === 0}
-              draggable={false}
-            />
-          </motion.div>
-        </AnimatePresence>
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        >
+          {photos.map((photo, index) => (
+            <div
+              key={photo.id}
+              className="flex-shrink-0 w-full h-full snap-center relative"
+              onClick={() => {
+                onSelectPhoto(index);
+                setIsExpanded(true);
+              }}
+            >
+              <Image
+                src={photo.photo_url}
+                alt={`${businessName} - Photo ${index + 1}`}
+                fill
+                className="object-cover"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </div>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
 
