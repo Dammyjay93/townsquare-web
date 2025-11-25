@@ -13,18 +13,14 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     initPostHog();
   }, []);
 
-  // Track page views on route changes (only if user has consented)
+  // Track page views on route changes (SPA navigation)
   useEffect(() => {
-    if (pathname && posthog.__loaded) {
-      // GDPR: Only track if user has opted in
-      const hasOptedIn = posthog.has_opted_in_capturing();
-      if (hasOptedIn) {
-        let url = window.origin + pathname;
-        if (searchParams?.toString()) {
-          url = url + '?' + searchParams.toString();
-        }
-        posthog.capture('$pageview', { $current_url: url });
+    if (pathname && posthog.__loaded && !posthog.has_opted_out_capturing()) {
+      let url = window.origin + pathname;
+      if (searchParams?.toString()) {
+        url = url + '?' + searchParams.toString();
       }
+      posthog.capture('$pageview', { $current_url: url });
     }
   }, [pathname, searchParams]);
 
